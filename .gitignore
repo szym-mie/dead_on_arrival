@@ -1,0 +1,7 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+res/tex/*
+.idea/**
+!res/tex/src
+
