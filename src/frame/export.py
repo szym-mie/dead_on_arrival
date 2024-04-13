@@ -13,6 +13,12 @@ class FrameMethod:
 
 
 def frame_method(func: Callable[[Any], Any]):
+    """annotate to register method in the default FrameManager"""
     method = FrameMethod(func)
     FrameManager.default().add_method(method)
     return func
+
+
+@frame_method
+def none(_target):
+    return False
