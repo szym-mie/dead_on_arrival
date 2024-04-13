@@ -1,0 +1,1 @@
+python build/src/export_img.py gimp-console-2.10

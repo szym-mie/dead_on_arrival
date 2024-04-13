@@ -1,0 +1,1 @@
+python3 build/src/export_img.py gimp
