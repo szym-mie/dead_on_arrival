@@ -1,7 +1,4 @@
-from math import floor
 from typing import Callable, TypeVar, Generic
-
-from src.math.vector2 import Vector2
 
 U = TypeVar('U')
 
@@ -14,12 +11,15 @@ class LevelArray(Generic[U]):
         self.x_size = x_size
         self.y_size = y_size
 
-        self.a = [[initial_factory() for _ in range(y_size)] for _ in range(x_size)]
+        self.array = [[initial_factory() for _ in range(y_size)] for _ in range(x_size)]
 
-    def get_at(self, vec: Vector2) -> U:
-        i = floor(vec.x)
-        j = floor(vec.y)
-        return self.a[i][j]
+    def get_at(self, i: int, j: int) -> U:
+        return self.array[i][j]
 
-    def __index__(self, vec: Vector2) -> U:
-        return self.get_at(vec)
+    def put_at(self, i: int, j: int, u: U) -> None:
+        self.array[i][j] = u
+
+    def with_position(self):
+        for x in range(self.x_size):
+            for y in range(self.y_size):
+                yield x, y, self.array[x][y]
