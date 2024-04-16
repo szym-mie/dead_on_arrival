@@ -5,17 +5,19 @@ import pygame
 from pygame import K_w, K_s,K_a, K_d
 import math
 WIDTH, HEIGHT = 400, 400
+
+
 class Player(Entity):
-    def __init__(self, initial_frame:Frame):
+    def __init__(self, initial_frame: Frame):
 
         super().__init__(initial_frame)
         self.image = pygame.image.load("res/tex/src/player/default_player_image.xcf").convert_alpha()
         self.image = pygame.transform.rotozoom(self.image, 0, 0.35)
         self.base_player_image = self.image
-        self.position = pygame.math.Vector2(400, 400)
-        self.base_player_rect = self.base_player_image.get_rect(center=self.position)
+        self.position = pygame.math.Vector2(0, 0)
+        self.base_player_rect = self.base_player_image.get_rect(center=(640, 360))
         self.rect = self.base_player_rect.copy()
-        self.player_speed = 5
+        self.player_speed = .25
         self.velocity_x = 0
         self.velocity_y = 0
 
@@ -33,12 +35,11 @@ class Player(Entity):
         self.image = pygame.transform.rotate(self.base_player_image, -angle)
         self.rect = self.image.get_rect(center=self.base_player_rect.center)
 
-
     def calculate_velocities(self):
         keys = pygame.key.get_pressed()
 
         if keys[K_w]:
-            self.velocity_y  = -self.player_speed
+            self.velocity_y = -self.player_speed
 
         if keys[K_d]:
             self.velocity_x = self.player_speed
@@ -50,17 +51,15 @@ class Player(Entity):
             self.velocity_x = -self.player_speed
 
         if self.velocity_x and self.velocity_y:
-            self.velocity_x /= math.sqrt(2)
-            self.velocity_y /= math.sqrt(2)
-
+            self.velocity_x /= math.sqrt(1.5)
+            self.velocity_y /= math.sqrt(1.5)
 
     def move(self):
         self.position += pygame.math.Vector2(self.velocity_x, self.velocity_y)
-        self.base_player_rect.center = self.position
+        # self.base_player_rect.center = self.position
         self.rect.center = self.base_player_rect.center
 
-
-    def update(self):
+    def update(self, _delta_time):
         self.calculate_velocities()
         self.move()
         self.player_turning()
