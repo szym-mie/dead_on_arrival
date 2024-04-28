@@ -4,13 +4,13 @@ from src.level.level_import import LevelImport
 
 
 class Level:
-    def __init__(self, level_import: LevelImport):
+    def __init__(self, wall_image, floor_image, level_import: LevelImport):
         self.chunk_size = 8
-        self.chunks = level_import.chunkify(self.chunk_size)
+        self.chunks = level_import.chunkify(wall_image, floor_image, self.chunk_size)
 
-    def draw(self, screen, x, y):
+    def draw(self, x, y):
         for cx, cy, chunk in self.chunks.with_position():
-            chunk.draw(screen, x + cx * chunk.size * 32, y + cy * chunk.size * 32)
+            chunk.draw(x + cx * chunk.size * 64, y + cy * chunk.size * 64)
 
     def resolve_chunk(self, x, y):
         return self.chunks.get_at(floor(x) // self.chunk_size,

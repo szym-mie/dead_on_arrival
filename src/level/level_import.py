@@ -15,15 +15,15 @@ class LevelImport:
     tile_ids: list[int]
     entity_ids: list[int]
 
-    def chunkify(self, size) -> LevelArray[LevelChunk]:
-        x_chunks = ceil(self.x_size / size)
-        y_chunks = ceil(self.y_size / size)
+    def chunkify(self, wall_image, floor_image, chunk_size) -> LevelArray[LevelChunk]:
+        x_chunks = ceil(self.x_size / chunk_size)
+        y_chunks = ceil(self.y_size / chunk_size)
 
-        chunk_array = LevelArray(x_chunks, y_chunks, lambda: LevelChunk(size))
+        chunk_array = LevelArray(x_chunks, y_chunks, lambda: LevelChunk(chunk_size))
 
         for x, y, new_chunk in chunk_array.with_position():
-            new_chunk.populate_chunk(x * size, y * size, self.y_size, self.tile_ids)
-            new_chunk.update_layers()
+            new_chunk.populate_chunk(x * chunk_size, y * chunk_size, self.y_size, self.tile_ids)
+            new_chunk.update_layers(wall_image, floor_image)
 
         return chunk_array
 
@@ -35,17 +35,18 @@ class LevelImport:
 
     @staticmethod
     def from_bitmap(x_size: int, y_size: int, tile_colors: list[int], entity_colors: list[int]) -> LevelImport:
-        def classify_colors(color: int) -> int:
-            r = color & 0xff
-            g = (color >> 8) & 0xff
-            b = (color >> 16) & 0xff
-
+        def classify_colors(r, g, b) -> int:
             rc = r // 0x40
             gc = g // 0x40
             bc = b // 0x40
 
             return rc + gc + bc
 
+        def color_iter(components) -> (int, int, int):
+            return list(zip(*[iter(components)] * 3))
+
+        print(list(zip(*[iter([classify_colors(*tc) for tc in color_iter(tile_colors)])] * 24)))
+
         return LevelImport(x_size, y_size,
-                           [classify_colors(tc) for tc in tile_colors],
-                           [classify_colors(ec) for ec in entity_colors])
+                           [classify_colors(*tc) for tc in color_iter(tile_colors)],
+                           [classify_colors(*ec) for ec in color_iter(entity_colors)])

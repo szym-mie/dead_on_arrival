@@ -1,54 +1,69 @@
-from math import ceil, floor
+from math import floor, ceil
 
-import pygame
+import pyglet
+from pyglet import image
+from pyglet.sprite import Sprite
+
 from src.entity.player import Player
 from src.frame.frame import Frame
 from src.level.level import Level
 from src.level.level_import import LevelImport
+from src.resource.json_loader import JSONLoader
+from src.resource.resource_manager import ResourceManager
+from src.util.controls import Controls
 
-WIDTH, HEIGHT = 1280 , 720
-TITLE ="TEST MOTION"
+# WIDTH, HEIGHT = 1280, 720
+# TITLE = "TEST MOTION"
 
+# pygame.init()
+# screen = pygame.display.set_mode((WIDTH, HEIGHT))
+# pygame.display.set_caption(TITLE)
+# clock = pygame.time.Clock()
 
-pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption(TITLE)
-clock = pygame.time.Clock()
-frame = Frame(None, None,None, None,None)
+window = pyglet.window.Window(caption='test', width=1280, height=720)
+
+base_pack = ResourceManager('./res', './pack/pack_base.json')
+base_pack.reload_pack()
+
+conf_pack = ResourceManager('./conf', './pack/pack_conf.json')
+conf_pack.reload_pack()
+
+wall_image = image.load(base_pack.get('tex.lvl.wall-d0h0-full0'))
+floor_image = image.load(base_pack.get('tex.lvl.floor-full0'))
+
+player_image = image.load(base_pack.get('tex.player.default_player_image'))
+player_image.anchor_x = player_image.width // 2
+player_image.anchor_y = player_image.height // 2
+player_sprite = Sprite(player_image)
+frame = Frame(player_sprite, None, None, None, None)
 player = Player(frame)
 player.position.x = 3
 player.position.y = 3
-background = pygame.transform.scale(pygame.image.load('res/tex/src/backgrounds/background_01.xcf').convert(), (WIDTH, HEIGHT))
-# with open('res/lvl/lvl1.json', 'r') as f:
-#     level = Level(LevelImport.from_json(f.read()))
 
-level_pa = pygame.PixelArray(pygame.image.load("res/lvl/lvl1.bmp"))
+controls = Controls.default()
 
-xs, ys = level_pa.shape
-pix = []
+controls.define_binds(JSONLoader(conf_pack.get('binds')).load())
+controls.attach_to_window(window)
 
-for j in range(ys):
-    for i in range(xs):
-        pix.append(level_pa[i, j])
+level_img = image.load(base_pack.get('lvl.lvl1')).get_image_data()
 
-level = Level(LevelImport.from_bitmap(24, 24, pix, []))
+level_img_fmt = 'RGB'
+level_img_pitch = level_img.width * len(level_img_fmt)
+pix = list(level_img.get_data(level_img_fmt, level_img_pitch))
+print(pix)
 
-# print(level.chunks[0].tiles.array)
+level = Level(wall_image, floor_image, LevelImport.from_bitmap(24, 24, pix, []))
 
-while True:
-    keys = pygame.key.get_pressed()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            exit()
+@window.event
+def on_draw():
+    window.clear()
+    level.draw(-player.position.x * 64 + 640, -player.position.y * 64 + 360)
+    player.draw()
 
-    screen.blit(background, (0, 0))
 
-    level.draw(screen, -player.position[0] * 32 + 640, -player.position[1] * 32 + 360)
-
-    screen.blit(player.image, player.rect)
-    player.update(0)
+def update(delta_time):
+    player.update(delta_time)
 
     if level.get_tile_at(player.position.x, player.position.y - 0.8) == 0:  # up
         player.position.y = floor(player.position.y) + 0.8
@@ -62,9 +77,6 @@ while True:
     if level.get_tile_at(player.position.x + 0.8, player.position.y) == 0:  # right
         player.position.x = ceil(player.position.x) - 0.8
 
-    pygame.display.update()
-    clock.tick(60)
 
-
-
-
+pyglet.clock.schedule_interval(update, 1 / 60)
+pyglet.app.run(1 / 60)
