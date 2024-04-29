@@ -2,22 +2,20 @@ from __future__ import annotations
 
 from abc import abstractmethod, ABC
 
-from pyglet.math import Vec2
-
 
 class BTester(ABC):
     @abstractmethod
-    def test_point(self, vec: Vec2) -> bool:
+    def test_point(self, vec):
         pass
 
     @abstractmethod
-    def test_bray(self, other) -> bool:
+    def test_bray(self, other):
         pass
 
     @abstractmethod
-    def test_bbox(self, other) -> bool:
+    def test_bbox(self, other):
         pass
 
     @abstractmethod
-    def test_bcircle(self, other) -> bool:
+    def test_bcircle(self, other):
         pass

@@ -15,13 +15,16 @@ class BCircle(BTester):
     def size(self):
         return self.radius * 2
 
-    def test_point(self, vec: Vec2) -> bool:
+    def test_point(self, vec):
+        # TODO return vector or none
         return self.center.dist_to(vec) <= self.radius
 
-    def test_bray(self, other) -> bool:
+    def test_bray(self, other):
+        # TODO return vector or none
         return False
 
-    def test_bbox(self, other) -> bool:
+    def test_bbox(self, other):
+        # TODO return vector or none
         circle_dist = other.center - self.center
         circle_dist_abs = Vec2(abs(circle_dist.x), abs(circle_dist.y))
         half_size = other.size * 0.5
@@ -36,7 +39,8 @@ class BCircle(BTester):
 
         return corner_dist <= self.radius ** 2
 
-    def test_bcircle(self, other) -> bool:
+    def test_bcircle(self, other):
+        # TODO return vector or none
         return self.center.distance(other.center) <= self.radius + other.radius
 
     @staticmethod

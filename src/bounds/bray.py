@@ -54,14 +54,16 @@ class BRay(BTester):
         y_aligned = (gy > 0 and oy > 0) or (gy < 0 and oy < 0)
         return x_aligned and y_aligned
 
-    def test_point(self, vec: Vec2) -> bool:
+    def test_point(self, vec) -> Vec2 | None:
         e = 0.00001
-        return self._is_point_in_quarter(vec) and self._distance_to_point(vec) < e
+        if self._is_point_in_quarter(vec) and self._distance_to_point(vec) < e:
+            return vec
+        return None
 
-    def test_bray(self, other) -> bool:
-        return False
+    def test_bray(self, other) -> Vec2 | None:
+        return None
 
-    def test_bbox(self, other) -> bool:
+    def test_bbox(self, other) -> Vec2 | None:
         sx = self.start.x
         sy = self.start.y
         inx = self.normal_inv.x
@@ -79,11 +81,14 @@ class BRay(BTester):
         t_min = max(t_min, min(ty1, ty2))
         t_max = min(t_max, max(ty1, ty2))
 
-        return t_max >= t_min
+        if t_max >= t_min:
+            return self.start + self.normal * t_min
+        return None
 
-    def test_bcircle(self, other) -> bool:
+    def test_bcircle(self, other) -> Vec2 | None:
         d = self._distance_to_point(other.center)
         if d < other.radius:
+            pass
             # cad = other.center.distance(vec_a)
             # cbd = other.center.distance(vec_b)
-            return True
+        return None

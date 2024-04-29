@@ -15,16 +15,19 @@ class BBox(BTester):
     def center(self) -> Vec2:
         return (self.size * 0.5) + self.lower
 
-    def test_point(self, vec: Vec2) -> bool:
+    def test_point(self, vec):
+        # TODO return vector or none
         upper = self.upper
         return \
             self.lower.x <= vec.x <= upper.x and \
             self.lower.y <= vec.y <= upper.y
 
-    def test_bray(self, other) -> bool:
+    def test_bray(self, other):
+        # TODO return vector or none
         pass
 
-    def test_bbox(self, other) -> bool:
+    def test_bbox(self, other):
+        # TODO return vector or none
         xa, ya = self.lower
         wa, ha = self.size
         xb, yb = other.lower
@@ -33,7 +36,8 @@ class BBox(BTester):
             xa < xb + wb and xa + wa > xb and \
             ya < yb + hb and ya + ha > yb
 
-    def test_bcircle(self, other) -> bool:
+    def test_bcircle(self, other):
+        # TODO return vector or none
         return other.test_bbox(self)
 
     @staticmethod
