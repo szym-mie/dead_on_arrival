@@ -5,16 +5,16 @@ from typing import Any
 
 """
 The quadTree structure divide the 2-dimensional array to four subarray:
-         __________________
-        |        |         |
-        |        |         |
-        |   NW   |   NE    |
-        |        |         |
-        |--------|---------|
-        |        |         |
-        |   SW   |   SE    |
-        |        |         |
-        |________|_________|
+         _________________
+        |        |        |
+        |        |        |
+        |   NW   |   NE   |
+        |        |        |
+        |--------|--------|
+        |        |        |
+        |   SW   |   SE   |
+        |        |        |
+        |________|________|
 
 
 """

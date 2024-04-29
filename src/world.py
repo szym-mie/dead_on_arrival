@@ -7,4 +7,5 @@ class World(Unit):
         self.level = Level.empty()
 
     def spawn(self, entity, x, y):
+        pass
 
