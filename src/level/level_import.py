@@ -27,14 +27,17 @@ class LevelImport:
 
         return chunk_array
 
-    @staticmethod
-    def from_json(json: str) -> LevelImport:
-        obj = loads(json)
-        # return LevelImport(obj['x_size'], obj['y_size'], obj['tile'], obj['entity'])
-        return LevelImport(obj['x_size'], obj['y_size'], obj['tile'], [])
+    @classmethod
+    def empty(cls) -> LevelImport:
+        return cls(0, 0, [], [])
 
-    @staticmethod
-    def from_bitmap(x_size: int, y_size: int, tile_colors: list[int], entity_colors: list[int]) -> LevelImport:
+    @classmethod
+    def from_json(cls, json: str) -> LevelImport:
+        obj = loads(json)
+        return cls(obj['x_size'], obj['y_size'], obj['tile'], [])
+
+    @classmethod
+    def from_bitmap(cls, x_size: int, y_size: int, tile_colors: list[int], entity_colors: list[int]) -> LevelImport:
         def classify_colors(r, g, b) -> int:
             rc = r // 0x40
             gc = g // 0x40
@@ -45,8 +48,6 @@ class LevelImport:
         def color_iter(components) -> (int, int, int):
             return list(zip(*[iter(components)] * 3))
 
-        print(list(zip(*[iter([classify_colors(*tc) for tc in color_iter(tile_colors)])] * 24)))
-
-        return LevelImport(x_size, y_size,
-                           [classify_colors(*tc) for tc in color_iter(tile_colors)],
-                           [classify_colors(*ec) for ec in color_iter(entity_colors)])
+        return cls(x_size, y_size,
+                   [classify_colors(*tc) for tc in color_iter(tile_colors)],
+                   [classify_colors(*ec) for ec in color_iter(entity_colors)])
