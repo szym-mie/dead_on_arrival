@@ -2,16 +2,16 @@ from typing import Any
 
 
 class Frame:
-    def __init__(self, surface, next_frame, delay, skip_method, hold_method):
+    def __init__(self, sprite, next_frame, delay, skip_method, hold_method):
         """
 
-        :param surface: surface to display
+        :param sprite: surface to display
         :param next_frame: next frame pointer
         :param delay: delay to next frame
         :param skip_method: return True to skip to new frame now
         :param hold_method: return True to stop the delay countdown
         """
-        self.surface = surface
+        self.sprite = sprite
         self.next_frame = next_frame
         self.delay = delay
         self.skip_method = skip_method

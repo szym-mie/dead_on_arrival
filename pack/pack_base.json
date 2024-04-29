@@ -1,0 +1,24 @@
+{
+  "ver": 1,
+  "meta": {
+    "name": "Default asset pack",
+    "description": "Base asset pack for Dead on Arrival.",
+    "release": "1.0",
+    "author": "szym-mie",
+    "email": "szym.mie@gmail.com"
+  },
+  "data": {
+    "tex": {
+      "#search": {
+        "path": "tex/",
+        "max_layers": 16
+      }
+    },
+    "lvl": {
+      "#search": {
+        "path": "lvl/",
+        "max_layers": 16
+      }
+    }
+  }
+}

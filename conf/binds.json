@@ -1,0 +1,6 @@
+{
+  "move_up": "W",
+  "move_down": "S",
+  "move_left": "A",
+  "move_right": "D"
+}

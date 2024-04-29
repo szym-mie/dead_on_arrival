@@ -7,7 +7,7 @@ gimp_exec = get_param(0)
 gimp_batches = [""]
 files_to_process = 0
 
-for image_in, rel_path in find_files("**/*.xcf", "tex/src/"):
+for image_in, rel_path in find_files("**/*.xcf", "src/tex/"):
     image_out = Path("tex/").joinpath(rel_path).with_suffix('.bmp')
 
     export_script = read_script_from_file(

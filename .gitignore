@@ -3,5 +3,5 @@
 /workspace.xml
 res/tex/*
 .idea/**
-!res/tex/src
+!res/src
 

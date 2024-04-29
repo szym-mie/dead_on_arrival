@@ -1,0 +1,14 @@
+{
+  "ver": 1,
+  "meta": {
+    "name": "Player configuration pack",
+    "description": "Pack containing references to player configuration pack.",
+    "required": true,
+    "release": "1.0",
+    "author": "szym-mie",
+    "email": "szym.mie@gmail.com"
+  },
+  "data": {
+    "binds": "binds.json"
+  }
+}
