@@ -4,9 +4,6 @@ from abc import abstractmethod, ABC
 
 from pyglet.math import Vec2
 
-from src.math.bbox import BBox
-from src.math.bcircle import BCircle
-
 
 class BTester(ABC):
     @abstractmethod
@@ -14,13 +11,13 @@ class BTester(ABC):
         pass
 
     @abstractmethod
-    def test_line(self, vec_a: Vec2, vec_b: Vec2) -> bool:
+    def test_bray(self, other) -> bool:
         pass
 
     @abstractmethod
-    def test_bbox(self, other: BBox) -> bool:
+    def test_bbox(self, other) -> bool:
         pass
 
     @abstractmethod
-    def test_bcircle(self, other: BCircle) -> bool:
+    def test_bcircle(self, other) -> bool:
         pass

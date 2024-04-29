@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Callable
 
-from src.math.vector2 import Vector2
+from src.bounds.vector2 import Vector2
 
 
 @dataclass

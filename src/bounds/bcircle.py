@@ -1,17 +1,15 @@
 from __future__ import annotations
-from dataclasses import dataclass, field
 from math import sqrt
 
 from pyglet.math import Vec2
 
-from src.math.bbox import BBox
-from src.math.btester import BTester
+from src.bounds.btester import BTester
 
 
-@dataclass
 class BCircle(BTester):
-    center: Vec2 = field(default_factory=lambda: Vec2())
-    radius: float = field(default=0.0)
+    def __init__(self, center, radius):
+        self.center = center
+        self.radius = radius
 
     @property
     def size(self):
@@ -20,16 +18,13 @@ class BCircle(BTester):
     def test_point(self, vec: Vec2) -> bool:
         return self.center.dist_to(vec) <= self.radius
 
-    def test_line(self, vec_a: Vec2, vec_b: Vec2) -> bool:
+    def test_bray(self, other) -> bool:
         return False
 
-    def test_bcircle(self, other: BCircle) -> bool:
-        return self.center.distance(other.center) <= self.radius + other.radius
-
-    def test_bbox(self, box: BBox) -> bool:
-        circle_dist = box.center - self.center
+    def test_bbox(self, other) -> bool:
+        circle_dist = other.center - self.center
         circle_dist_abs = Vec2(abs(circle_dist.x), abs(circle_dist.y))
-        half_size = box.size * 0.5
+        half_size = other.size * 0.5
         corner_dist = circle_dist_abs.distance(half_size)
 
         if circle_dist.x <= half_size.x or circle_dist.y <= half_size.y:
@@ -41,15 +36,18 @@ class BCircle(BTester):
 
         return corner_dist <= self.radius ** 2
 
+    def test_bcircle(self, other) -> bool:
+        return self.center.distance(other.center) <= self.radius + other.radius
+
     @staticmethod
-    def from_bbox_contain(bbox: BBox) -> BCircle:
+    def from_bbox_contain(bbox) -> BCircle:
         center = bbox.center
         radius = min(bbox.size.x, bbox.size.y) / 2
 
         return BCircle(center, radius)
 
     @staticmethod
-    def from_bbox_diagonal(bbox: BBox) -> BCircle:
+    def from_bbox_diagonal(bbox) -> BCircle:
         center = bbox.center
         radius = bbox.size.length / 2
 
