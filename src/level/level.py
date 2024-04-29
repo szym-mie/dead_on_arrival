@@ -25,3 +25,6 @@ class Level:
         except IndexError:
             return None
 
+    @classmethod
+    def empty(cls):
+        return cls(None, None, LevelImport.empty())

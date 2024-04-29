@@ -4,34 +4,21 @@ from pyglet.sprite import Sprite
 
 from src.entity.entity import Entity
 from src.frame.frame import Frame
-
 from src.util.controls import Controls
-from src.util.unit import Unit
 
 
-class Player(Entity, Unit):
+class Player(Entity):
     def __init__(self, initial_frame: Frame):
         super().__init__()
         self.sprite: Sprite = initial_frame.sprite
         self.rect = None
-        self.drag = 10
-        self.player_speed = 0.3
+        self.drag = 20
+        self.player_speed = 0.25
         self.is_walking = False
 
     def draw(self):
         self.sprite.update(640, 360, 0.0, self.rotation, 2.0)
         self.sprite.draw()
-
-    def update_motion(self, delta_time):
-        # print(self.position)
-        e = 0.00001
-
-        if self.velocity.mag > e:
-            last_magnitude = self.velocity.mag
-            next_magnitude = max(last_magnitude - self.get_velocity_loss(delta_time), 0)
-            scale = next_magnitude / last_magnitude
-            self.velocity *= scale
-            self.position += self.velocity
 
     def react_to_control(self):
         controls = Controls.default()
@@ -58,6 +45,6 @@ class Player(Entity, Unit):
         self.rotation = -atan2(y_change_mouse_player, x_change_mouse_player) * 60
 
     def update(self, delta_time):
-        super().update(delta_time)
+        self.time += delta_time
         self.update_motion(delta_time)
         self.react_to_control()

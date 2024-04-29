@@ -1,25 +1,26 @@
 from __future__ import annotations
 from dataclasses import dataclass, field
 
+from pyglet.math import Vec2
+
 from src.math.bcircle import BCircle
 from src.math.btester import BTester
-from src.math.vector2 import Vector2
 
 
 @dataclass
 class BBox(BTester):
-    lower: Vector2 = field(default_factory=lambda: Vector2())
-    size: Vector2 = field(default_factory=lambda: Vector2())
+    lower: Vec2 = field(default_factory=lambda: Vec2())
+    size: Vec2 = field(default_factory=lambda: Vec2())
 
     @property
-    def upper(self) -> Vector2:
+    def upper(self) -> Vec2:
         return self.lower.copy().add(self.size)
 
     @property
-    def center(self) -> Vector2:
+    def center(self) -> Vec2:
         return self.size.copy().scale(0.5).add(self.lower)
 
-    def test_point(self, vec: Vector2) -> bool:
+    def test_point(self, vec: Vec2) -> bool:
         upper = self.upper
         return \
             self.lower.x <= vec.x <= upper.x and \
@@ -38,10 +39,10 @@ class BBox(BTester):
         return circle.test_bbox(self)
 
     @staticmethod
-    def from_points(lower: Vector2, upper: Vector2) -> BBox:
+    def from_points(lower: Vec2, upper: Vec2) -> BBox:
         return BBox(lower.copy(), upper.copy().sub(lower))
 
     @staticmethod
-    def from_center(center: Vector2, size: Vector2) -> BBox:
+    def from_center(center: Vec2, size: Vec2) -> BBox:
         half_size = size.copy().abs().scale(0.5)
         return BBox(center.copy().sub(half_size), size.copy())

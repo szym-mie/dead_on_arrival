@@ -16,7 +16,10 @@ class Entity(ABC):
         return self.drag * delta_time
 
     def get_entity_drag(self, delta_time):
-        return self.drag * self.velocity.mag * pow(delta_time, 1)
+        return self.drag * self.velocity.mag * delta_time
+
+    def get_projectile_drag(self, delta_time):
+        return self.drag * self.velocity.mag * pow(delta_time, 2)
 
     def update_motion(self, delta_time):
         e = 0.00001
@@ -25,10 +28,9 @@ class Entity(ABC):
             last_magnitude = self.velocity.mag
             next_magnitude = max(last_magnitude - self.get_velocity_loss(delta_time), 0)
             scale = next_magnitude / last_magnitude
-            print(next_magnitude, last_magnitude)
             self.velocity *= scale
             self.position += self.velocity
 
-    @abstractmethod
     def update(self, delta_time):
         self.time += delta_time
+        self.update_motion(delta_time)
