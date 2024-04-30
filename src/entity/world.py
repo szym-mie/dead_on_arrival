@@ -9,3 +9,6 @@ class World(Unit):
     def spawn(self, entity, x, y):
         pass
 
+    def update(self, delta_time):
+        pass
+

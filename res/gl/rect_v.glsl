@@ -4,7 +4,7 @@ in vec2 vertex;
 out vec2 texture_coord;
 
 uniform vec3 position;
-uniform float azimuth;
+uniform float rotation;
 uniform float scale;
 
 uniform mat4 projection;
@@ -12,8 +12,8 @@ uniform mat4 projection;
 void
 main()
 {
-    float s = sin(scale);
-    float c = cos(scale);
+    float s = sin(rotation);
+    float c = cos(rotation);
 
     mat2 model_view = mat2(
         scale * c, scale * s,

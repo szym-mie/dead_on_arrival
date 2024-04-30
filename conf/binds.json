@@ -1,7 +1,7 @@
 {
-  "move_up": "W",
-  "move_down": "S",
-  "move_left": "A",
-  "move_right": "D",
-  "use_weapon": "P"
+  "move_up": "KEY_W",
+  "move_down": "KEY_S",
+  "move_left": "KEY_A",
+  "move_right": "KEY_D",
+  "fire_weapon": "MOUSE_1"
 }

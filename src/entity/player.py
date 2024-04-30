@@ -1,18 +1,17 @@
-from math import atan2, inf
+from math import atan2, inf, pi
 
-import pyglet.window.mouse
-from pyglet.sprite import Sprite
 from pyglet.math import Vec2
+from pyglet.sprite import Sprite
+
 from src.entity.entity import Entity
+from src.entity.projectile import Projectile
+from src.entity.ranged_weapon import RangedWeapon
 from src.frame.frame import Frame
 from src.util.controls import Controls
 
-from src.entity.projectile import Projectile
-from src.entity.item import Item
-from src.entity.ranged_weapon import RangedWeapon
 
 class Player(Entity):
-    def __init__(self, initial_frame: Frame, bullet_initial_frame:Frame):
+    def __init__(self, initial_frame: Frame, bullet_initial_frame: Frame):
         super().__init__()
         self.sprite: Sprite = initial_frame.sprite
         self.bullet_initial_frame = bullet_initial_frame
@@ -21,11 +20,11 @@ class Player(Entity):
         self.player_speed = 0.25
         self.is_walking = False
         self.is_shooting = False
-        self.current_weapon= RangedWeapon(name="conda",ammo=inf, damage=5, usage_cooldown=10, weapon_offset=Vec2(90, 100))
+        self.current_weapon = RangedWeapon(name="conda", ammo=inf, damage=5, usage_cooldown=10, weapon_offset=Vec2(0, -1))
         self.used_ammo = 0
         self.score = 0
         self.kills = 0
-        self.kills_ratio =  self.calculate_kills_ratio()
+        self.kills_ratio = self.calculate_kills_ratio()
         self.health_point = 100
         self.is_dead = False
         self.bullet_group = []
@@ -59,11 +58,10 @@ class Player(Entity):
         if self.current_weapon.usage_cooldown == 0 and self.current_weapon.ammo > 0:
             print(f'shooting')
             self.current_weapon.usage_cooldown = 10
-            spawn_bullet_pos = self.position + self.current_weapon.weapon_offset.rotate(-self.rotation)
-            print(f'{self.position=}')
-            print(f'{self.current_weapon.weapon_offset=}')
+            spawn_bullet_pos = Vec2(1, -0.3).rotate(-self.rotation / 360 * 2 * pi)
+            # spawn_bullet_pos =
             print(f'{spawn_bullet_pos=}')
-            projectile = Projectile(self.bullet_initial_frame, x=spawn_bullet_pos[0], y = spawn_bullet_pos[1], angle=-self.rotation)
+            projectile = Projectile(self.bullet_initial_frame, x=spawn_bullet_pos.x * 64, y=spawn_bullet_pos.y * 64, angle=-self.rotation)
             self.bullet_group.append(projectile)
 
     def react_to_control(self):
@@ -86,11 +84,9 @@ class Player(Entity):
             self.velocity.x = -self.player_speed
             self.is_walking = True
 
-        if controls.get_bind("use_weapon"):
+        if controls.get_bind("fire_weapon"):
             self.attack()
             self.is_shooting = True
-
-
 
         x_change_mouse_player = controls.mouse_x - 640
         y_change_mouse_player = controls.mouse_y - 360
@@ -100,6 +96,6 @@ class Player(Entity):
         self.time += delta_time
         self.update_motion(delta_time)
         self.react_to_control()
-        if self.current_weapon.usage_cooldown > 0 :
+        if self.current_weapon.usage_cooldown > 0:
             self.current_weapon.usage_cooldown -= 1
 
