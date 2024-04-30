@@ -1,9 +1,26 @@
 from src.entity.entity import Entity
-
-
+from src.frame.frame import Frame
+from math import cos, sin, pi
 class Projectile(Entity):
-    def __init__(self):
+    def __init__(self, initial_frame, x, y, angle):
         super().__init__()
+        self.sprite = initial_frame.sprite
         self.get_velocity_loss = self.get_projectile_drag
+        self.rect = None
+        self.position.x = x
+        self.position.y = y
+        self.angle = angle
+        self.speed = 0.5
+        self.velocity.x = cos(self.angle*(2*pi/360))*self.speed
+        self.velocity.y = sin(self.angle*(2*pi/360))*self.speed
+
+
+    def update(self, delta_time):
+        self.update_motion(delta_time)
+
+
+    def draw(self):
+        self.sprite.update(self.position.x,self.position.y, 0, self.angle, 2)
+        self.sprite.draw()
 
 

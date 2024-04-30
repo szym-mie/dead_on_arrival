@@ -11,5 +11,5 @@ class MeleeWeapon(Weapon):
     def use(self):
         pass
 
-    def __init__(self, name):
-        super().__init__(name)
+    def __init__(self, name, damage, usage_cooldown, weapon_offset):
+        super().__init__(name, damage, usage_cooldown, weapon_offset)

@@ -3,8 +3,8 @@ from src.world import World
 
 
 class RangedWeapon(Weapon):
-    def __init__(self,name, ammo):
-        super().__init__(name)
+    def __init__(self,name, ammo, damage, usage_cooldown, weapon_offset):
+        super().__init__(name, damage, usage_cooldown, weapon_offset)
         self.ammo = ammo
 
     def use(self):

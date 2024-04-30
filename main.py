@@ -11,14 +11,7 @@ from src.level.level_import import LevelImport
 from src.resource.json_loader import JSONLoader
 from src.resource.resource_manager import ResourceManager
 from src.util.controls import Controls
-
-# WIDTH, HEIGHT = 1280, 720
-# TITLE = "TEST MOTION"
-
-# pygame.init()
-# screen = pygame.display.set_mode((WIDTH, HEIGHT))
-# pygame.display.set_caption(TITLE)
-# clock = pygame.time.Clock()
+from src.entity.projectile import Projectile
 
 window = pyglet.window.Window(caption='test', width=1280, height=720)
 
@@ -30,16 +23,19 @@ conf_pack.reload_pack()
 
 wall_image = image.load(base_pack.get('tex.lvl.wall-d0h0-full0'))
 floor_image = image.load(base_pack.get('tex.lvl.floor-full0'))
-
+bullet_image = image.load(base_pack.get('tex.wpn.frag-item'))
+bullet_sprite = Sprite(bullet_image)
+bullet_frame = Frame(bullet_sprite, None, None, None, None)
 player_image = image.load(base_pack.get('tex.player.default_player_image'))
 player_image.anchor_x = player_image.width // 2
 player_image.anchor_y = player_image.height // 2
 player_sprite = Sprite(player_image)
 frame = Frame(player_sprite, None, None, None, None)
-player = Player(frame)
+player = Player(frame, bullet_frame)
 player.position.x = 3
 player.position.y = 3
 
+projectile = Projectile(bullet_frame, 640 , 360, player.rotation)
 controls = Controls.default()
 
 controls.define_binds(JSONLoader(conf_pack.get('binds')).load())
@@ -54,16 +50,23 @@ print(pix)
 
 level = Level(wall_image, floor_image, LevelImport.from_bitmap(24, 24, pix, []))
 
-
 @window.event
 def on_draw():
     window.clear()
     level.draw(-player.position.x * 64 + 640, -player.position.y * 64 + 360)
     player.draw()
+    projectile.draw()
+    for bullet in  player.bullet_group:
+        bullet.draw()
+
 
 
 def update(delta_time):
     player.update(delta_time)
+
+    for bullet in  player.bullet_group:
+        bullet.update()
+
 
     if level.get_tile_at(player.position.x, player.position.y - 0.8) == 0:  # up
         player.position.y = floor(player.position.y) + 0.8

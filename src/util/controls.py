@@ -1,4 +1,4 @@
-import pyglet.window.key
+
 from pyglet.window import key
 
 from src.util.unit import Unit
@@ -10,6 +10,8 @@ class Controls(Unit):
         self.bind_map = {}
         self.mouse_x = 0
         self.mouse_y = 0
+
+
 
     def define_binds(self, bind_map):
         self.bind_map = bind_map
