@@ -55,7 +55,6 @@ def on_draw():
     window.clear()
     level.draw(-player.position.x * 64 + 640, -player.position.y * 64 + 360)
     player.draw()
-    projectile.draw()
     for bullet in  player.bullet_group:
         bullet.draw()
 
@@ -65,7 +64,7 @@ def update(delta_time):
     player.update(delta_time)
 
     for bullet in  player.bullet_group:
-        bullet.update()
+        bullet.update(delta_time)
 
 
     if level.get_tile_at(player.position.x, player.position.y - 0.8) == 0:  # up

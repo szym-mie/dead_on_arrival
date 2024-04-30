@@ -10,17 +10,22 @@ class Projectile(Entity):
         self.position.x = x
         self.position.y = y
         self.angle = angle
-        self.speed = 0.5
+        self.speed = 5
         self.velocity.x = cos(self.angle*(2*pi/360))*self.speed
         self.velocity.y = sin(self.angle*(2*pi/360))*self.speed
 
 
+    def move(self):
+        self.position.x += self.velocity.x
+        self.position.y +=  self.velocity.y
+
     def update(self, delta_time):
+        self.move()
         self.update_motion(delta_time)
 
 
     def draw(self):
-        self.sprite.update(self.position.x,self.position.y, 0, self.angle, 2)
+        self.sprite.update(self.position.x +640,self.position.y+360, 0, self.angle, 0.2)
         self.sprite.draw()
 
 

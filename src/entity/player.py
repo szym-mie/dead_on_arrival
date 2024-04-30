@@ -21,7 +21,7 @@ class Player(Entity):
         self.player_speed = 0.25
         self.is_walking = False
         self.is_shooting = False
-        self.current_weapon= RangedWeapon(name="conda",ammo=inf, damage=5, usage_cooldown=10, weapon_offset=Vec2(45, 20))
+        self.current_weapon= RangedWeapon(name="conda",ammo=inf, damage=5, usage_cooldown=10, weapon_offset=Vec2(90, 100))
         self.used_ammo = 0
         self.score = 0
         self.kills = 0
@@ -56,10 +56,14 @@ class Player(Entity):
         return self.kills / self.used_ammo if self.used_ammo > 0 else 0
 
     def attack(self):
-        if self.current_weapon.usage_cooldown == 0:
+        if self.current_weapon.usage_cooldown == 0 and self.current_weapon.ammo > 0:
+            print(f'shooting')
             self.current_weapon.usage_cooldown = 10
-            spawn_bullet_pos = self.position + self.current_weapon.weapon_offset.rotate(self.rotation)
-            projectile = Projectile(self.bullet_initial_frame, spawn_bullet_pos[0], spawn_bullet_pos[1], self.rotation)
+            spawn_bullet_pos = self.position + self.current_weapon.weapon_offset.rotate(-self.rotation)
+            print(f'{self.position=}')
+            print(f'{self.current_weapon.weapon_offset=}')
+            print(f'{spawn_bullet_pos=}')
+            projectile = Projectile(self.bullet_initial_frame, x=spawn_bullet_pos[0], y = spawn_bullet_pos[1], angle=-self.rotation)
             self.bullet_group.append(projectile)
 
     def react_to_control(self):
