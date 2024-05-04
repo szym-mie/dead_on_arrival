@@ -9,6 +9,6 @@
     "email": "szym.mie@gmail.com"
   },
   "data": {
-    "binds": "binds.json"
+    "binds": { "#get": { "path": "binds.json", "loader": "json" } }
   }
 }

@@ -11,18 +11,24 @@
     "tex": {
       "#search": {
         "path": "tex/",
+        "loader": "image",
+        "load_later": false,
         "max_layers": 16
       }
     },
     "gl": {
       "#search": {
         "path": "gl/",
+        "loader": "text",
+        "load_later": false,
         "max_layers": 4
       }
     },
     "lvl": {
       "#search": {
         "path": "lvl/",
+        "loader": "image",
+        "load_later": true,
         "max_layers": 16
       }
     }

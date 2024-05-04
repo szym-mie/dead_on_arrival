@@ -1,9 +1,15 @@
-from operator import itemgetter
 from pathlib import Path
-from typing import Any
+from typing import Any, Type
 
-from src.util.console import Console
+from src.resource.empty_loader import EmptyLoader
+from src.resource.frame_loader import FrameLoader
+from src.resource.image_loader import ImageLoader
+from src.resource.loader import Loader
+from src.resource.sound_loader import SoundLoader
+from src.resource.text_loader import TextLoader
 from src.resource.json_loader import JSONLoader
+from src.resource.resource import Resource
+from src.util.console import Console
 
 
 class ResourceManager:
@@ -16,8 +22,18 @@ class ResourceManager:
         self.pack_name = 'UNKNOWN'
         self.pack_release = 'UNKNOWN'
 
+        self.loaders = {
+            'empty': EmptyLoader,
+            'text': TextLoader,
+            'json': JSONLoader,
+            'frame': FrameLoader,
+            'image': ImageLoader,
+            'sound': SoundLoader
+        }
+
         self.entry_commands = {
-            'search': lambda entry: self.search(entry)
+            'get': lambda entry: self._command_get(entry),
+            'search': lambda entry: self._command_search(entry)
         }
 
     def reload_pack(self):
@@ -63,12 +79,12 @@ class ResourceManager:
             elif type(entry) is list:
                 for i, next_entry in enumerate(entry):
                     walk(parents + [str(i)], pack_tree, next_entry)
+            elif type(entry) is Resource:
+                res_id = ResourceManager._get_resource_id(parents)
+                pack_tree[res_id] = entry
             elif type(entry) is str:
-                res_id = ResourceManager.get_resource_id(parents)
-                if type(entry) is str:
-                    pack_tree[res_id] = self.get_base_path(entry)
-                else:
-                    pack_tree[res_id] = None
+                res_id = ResourceManager._get_resource_id(parents)
+                pack_tree[res_id] = self._url_only_resource(entry)
             else:
                 Console.default() \
                     .log_warn(f'malformed pack entry {entry}')
@@ -81,28 +97,64 @@ class ResourceManager:
 
     def get(self, res_id):
         try:
-            return self.pack[res_id]
+            return self.pack[res_id].get()
         except KeyError:
             Console.default() \
                 .log_warn(f'cannot find resource {res_id} in pack {self.pack_name}')
 
-    def search(self, entry):
-        path, max_layers = itemgetter('path', 'max_layers')(entry)
-        return self.search_path(self.get_base_path(path), max_layers)
+    def _create_loader(self, loader_name, url):
+        try:
+            loader_class: Type[Loader] = self.loaders[loader_name]
+            return loader_class(url)
+        except KeyError:
+            Console.default() \
+                .log_warn(f'cannot find loader {loader_name} in pack {self.pack_name}')
 
-    def search_path(self, path: Path, max_layers: int):
+    def _url_only_resource(self, path):
+        rel_url = self._get_base_path(path).relative_to(self.base_url)
+        return Resource(str(rel_url), EmptyLoader(None), False)
+
+    def _command_get(self, entry):
+        path = entry.get('path')
+        loader = entry.get('loader', 'empty')
+        load_later = entry.get('load_later', False)
+
+        file_path = self._get_base_path(path)
+        loader_instance = self._create_loader(loader, file_path)
+        return Resource(file_path, loader_instance, load_later)
+
+    def _command_search(self, entry):
+        path = entry.get('path')
+        loader = entry.get('loader', 'empty')
+        load_later = entry.get('load_later', False)
+        max_layers = entry.get('max_layers', 16)
+
+        try:
+            return self._search_path(self._get_base_path(path),
+                                     loader,
+                                     load_later,
+                                     max_layers)
+        except KeyError:
+            Console.default() \
+                .log_warn(f'cannot find loader {loader} in pack {self.pack_name}')
+
+    def _search_path(self, path: Path, loader: Loader, load_later, max_layers):
         entries = {}
         children = list(path.glob('*'))
         for dir_path in filter(lambda p: p.is_dir(), children):
-            entries[dir_path.name] = self.search_path(dir_path, max_layers - 1)
+            entries[dir_path.name] = self._search_path(dir_path,
+                                                       loader,
+                                                       load_later,
+                                                       max_layers - 1)
         for file_path in filter(lambda p: p.is_file(), children):
-            entries[file_path.stem] = str(file_path.relative_to(self.base_url))
+            loader_instance = self._create_loader(loader, file_path)
+            entries[file_path.stem] = Resource(file_path, loader_instance, load_later)
 
         return entries
 
-    def get_base_path(self, path):
+    def _get_base_path(self, path):
         return Path(self.base_url).joinpath(path)
 
     @staticmethod
-    def get_resource_id(id_tokens: list[str]):
+    def _get_resource_id(id_tokens: list[str]):
         return '.'.join(id_tokens)

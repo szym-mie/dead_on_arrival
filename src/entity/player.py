@@ -3,6 +3,7 @@ from math import atan2, inf, pi
 from pyglet.math import Vec2
 from pyglet.sprite import Sprite
 
+from src.bounds.bcircle import BCircle
 from src.entity.entity import Entity
 from src.entity.projectile import Projectile
 from src.entity.ranged_weapon import RangedWeapon
@@ -11,10 +12,11 @@ from src.util.controls import Controls
 
 
 class Player(Entity):
-    def __init__(self, initial_frame: Frame, bullet_initial_frame: Frame):
+    def __init__(self, initial_frame: Frame, bullet_initial_frame: Frame, level):
         super().__init__()
         self.sprite: Sprite = initial_frame.sprite
         self.bullet_initial_frame = bullet_initial_frame
+        self.level = level
         self.rect = None
         self.drag = 20
         self.player_speed = 0.25
@@ -28,6 +30,7 @@ class Player(Entity):
         self.health_point = 100
         self.is_dead = False
         self.bullet_group = []
+        self.pickup_zone = BCircle(self.position, 1)
 
     def increase_hp(self, val: int):
         self.health_point = max(0, self.health_point - val)
@@ -61,7 +64,7 @@ class Player(Entity):
             spawn_bullet_pos = Vec2(1, -0.3).rotate(-self.rotation / 360 * 2 * pi)
             # spawn_bullet_pos =
             print(f'{spawn_bullet_pos=}')
-            projectile = Projectile(self.bullet_initial_frame, x=spawn_bullet_pos.x * 64, y=spawn_bullet_pos.y * 64, angle=-self.rotation)
+            projectile = Projectile(self.bullet_initial_frame, spawn_bullet_pos.x * 64, spawn_bullet_pos.y * 64, -self.rotation, self.level)
             self.bullet_group.append(projectile)
 
     def react_to_control(self):
@@ -90,7 +93,7 @@ class Player(Entity):
 
         x_change_mouse_player = controls.mouse_x - 640
         y_change_mouse_player = controls.mouse_y - 360
-        self.rotation = -atan2(y_change_mouse_player, x_change_mouse_player) * 60
+        self.rotation = -atan2(y_change_mouse_player, x_change_mouse_player) * 180 / pi
 
     def update(self, delta_time):
         self.time += delta_time
@@ -98,4 +101,8 @@ class Player(Entity):
         self.react_to_control()
         if self.current_weapon.usage_cooldown > 0:
             self.current_weapon.usage_cooldown -= 1
+
+        for bullet in self.bullet_group:
+            if self.level.get_tile_at(bullet.position.x, bullet.position.y) == 0:
+                del self
 

@@ -4,7 +4,7 @@ from src.entity.entity import Entity
 
 
 class Projectile(Entity):
-    def __init__(self, initial_frame, x, y, angle):
+    def __init__(self, initial_frame, x, y, angle, level):
         super().__init__()
         self.sprite = initial_frame.sprite
         self.get_velocity_loss = self.get_projectile_drag
@@ -13,6 +13,7 @@ class Projectile(Entity):
         self.position.y = y
         self.angle = angle
         self.speed = 25
+        self.level = level
         self.velocity.x = cos(self.angle*(2*pi/360))*self.speed
         self.velocity.y = sin(self.angle*(2*pi/360))*self.speed
 

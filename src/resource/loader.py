@@ -1,25 +1,16 @@
-from abc import ABC, abstractmethod
-from enum import Enum
-from typing import TypeVar, Generic, Callable, IO
-
-R = TypeVar('R')
-
-
-class Loader(ABC, Generic[R]):
+class Loader:
     def __init__(self, url):
         self.url = url
 
-    @abstractmethod
-    def load(self) -> R:
+    def load(self):
         return NotImplemented
 
-    class FileType(Enum):
-        text = 't'
-        binary = 'b'
-
-    @staticmethod
-    def map_open(url: str, file_type: FileType, map_fn: Callable[[IO], R]) -> R:
-        mode = 'r' + file_type.value
-        with open(url, mode, encoding='utf-8') as f:
-            return map_fn(f)
-
+    def map_open(self, file_type: str, map_fn):
+        if file_type == 'text':
+            mode = 'r'
+            with open(self.url, mode, encoding='utf-8') as file:
+                return map_fn(self.url, file)
+        elif file_type == 'binary':
+            mode = 'rb'
+            with open(self.url, mode) as file:
+                return map_fn(self.url, file)
