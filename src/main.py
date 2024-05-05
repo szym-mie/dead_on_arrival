@@ -1,24 +1,24 @@
 from math import floor, ceil
 
-from pyglet.gl import *
-from pyglet.math import Mat4
+from pyglet.gl import glClear, GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, GLfloat, GLdouble, glClearDepth, glClearColor
+from pyglet.math import Mat4, Vec3
 from pyglet.sprite import Sprite
+from pyglet.window import Window
+from pyglet import clock, app
 
 from src.entity.player import Player
 from src.frame.frame import Frame
+from src.graphics.camera import Camera
 from src.graphics.rect import Rect
+from src.graphics.rect_prototype import RectPrototype
 from src.level.level import Level
 from src.level.level_import import LevelImport
-from src.resource.resource_manager import ResourceManager
+from src.resource.default_resource_packs import base_pack, conf_pack, load_all
 from src.util.controls import Controls
 
-window = pyglet.window.Window(caption='test', width=1280, height=720)
+window = Window(caption='test', width=1280, height=720)
 
-base_pack = ResourceManager('./res', './pack/pack_base.json')
-base_pack.reload_pack()
-
-conf_pack = ResourceManager('./conf', './pack/pack_conf.json')
-conf_pack.reload_pack()
+load_all()
 
 # wall_image = image.load(base_pack.get('tex.lvl.wall-d0h0-full0'))
 # floor_image = image.load(base_pack.get('tex.lvl.floor-full0'))
@@ -55,23 +55,29 @@ player = Player(frame, bullet_frame, level)
 player.position.x = 3
 player.position.y = 3
 
+tx = 0
+
+test_rect_proto = RectPrototype(bullet_image)
+test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx // 32, 48)
+tx += 32
+test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx // 32, 48)
+tx += 32
+test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx // 32, 48)
+tx += 32
+test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx // 32, 48)
+tx += 32
+
 test_rect = Rect(player_image)
 test_rect.scale = 50
 test_rect.position_x = 0
 test_rect.position_y = 0
 test_rect.position_z = 16
-# with open(base_pack.get('gl.rect_v'), 'r') as vf, open(base_pack.get('gl.rect_f'), 'r') as ff:
-#     vs = vf.read()
-#     fs = ff.read()
 
 Rect.update_shader(base_pack.get('gl.rect_v'), base_pack.get('gl.rect_f'))
-test_projection = Mat4.orthogonal_projection(-640, 640, -360, 360, -255, 255)
 
-test_rect2 = Rect(bullet_image)
-test_rect2.scale = 50
-test_rect2.position_x = 0
-test_rect2.position_y = 0
-test_rect2.position_z = 24
+projection = Mat4.orthogonal_projection(-640, 640, -360, 360, -255, 255)
+camera = Camera(projection)
+camera.update()
 
 
 @window.event
@@ -85,8 +91,8 @@ def on_draw():
     for bullet in player.bullet_group:
         bullet.draw()
     test_rect.rotation += 0.01
-    test_rect.draw(test_projection)
-    test_rect2.draw(test_projection)
+    test_rect.draw(projection)
+    test_rect_proto.draw_all(camera)
 
 
 def update(delta_time):
@@ -108,5 +114,5 @@ def update(delta_time):
         player.position.x = ceil(player.position.x) - 0.8
 
 
-pyglet.clock.schedule_interval(update, 1 / 60)
-pyglet.app.run(1 / 60)
+clock.schedule_interval(update, 1 / 60)
+app.run(1 / 60)

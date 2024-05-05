@@ -3,7 +3,7 @@ from pyglet.gl import *
 
 class Texture:
     def __init__(self, image):
-        self.texture_handler = GLint()
+        self.texture_handler = GLuint()
         glGenTextures(1, self.texture_handler)
         glBindTexture(GL_TEXTURE_2D, self.texture_handler)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)

@@ -6,6 +6,7 @@ class Camera:
     def __init__(self, projection_matrix):
         self._projection = projection_matrix
         self.projection_array = (GLfloat * 16)()
+        self.update_projection()
         self._view = Mat4()
         self.view_array = (GLfloat * 16)()
         self.position = Vec3()
@@ -26,7 +27,7 @@ class Camera:
         self._view.scale(scale_vector)
         self.update_view()
 
-    def bind(self, u_projection, u_view):
+    def bind_to(self, u_projection, u_view):
         glUniformMatrix4fv(u_projection, 1, GL_FALSE, self.projection_array)
         glUniformMatrix4fv(u_view, 1, GL_FALSE, self.view_array)
 
