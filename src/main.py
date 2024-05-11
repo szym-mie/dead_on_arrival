@@ -58,14 +58,14 @@ player.position.y = 3
 tx = 0
 
 test_rect_proto = RectPrototype(bullet_image)
-test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx // 32, 48)
-tx += 32
-test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx // 32, 48)
-tx += 32
-test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx // 32, 48)
-tx += 32
-test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx // 32, 48)
-tx += 32
+test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx, Vec3(1, 1, 1))
+tx += 1
+test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx, Vec3(1, 1, 1))
+tx += 1
+test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx, Vec3(1, 1, 1))
+tx += 1
+test_rect_proto.create_mesh(Vec3(tx, 0, 0), tx, Vec3(1, 1, 1))
+tx += 1
 
 test_rect = Rect(player_image)
 test_rect.scale = 50
@@ -77,7 +77,8 @@ Rect.update_shader(base_pack.get('gl.rect_v'), base_pack.get('gl.rect_f'))
 
 projection = Mat4.orthogonal_projection(-640, 640, -360, 360, -255, 255)
 camera = Camera(projection)
-camera.update()
+camera.scale = 48
+# camera.track_entity(player)
 
 
 @window.event
@@ -85,14 +86,18 @@ def on_draw():
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glClearColor(GLfloat(0.0), GLfloat(0.0), GLfloat(0.0), GLfloat(0.0))
     glClearDepth(GLdouble(1.0))
-    
+
+    camera.position = player.position
+    camera.update()
+    print(camera.position)
+
     level.draw(-player.position.x * 64 + 640, -player.position.y * 64 + 360)
     player.draw()
     for bullet in player.bullet_group:
         bullet.draw()
     test_rect.rotation += 0.01
     test_rect.draw(projection)
-    test_rect_proto.draw_all(camera)
+    test_rect_proto.draw(camera)
 
 
 def update(delta_time):

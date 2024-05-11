@@ -1,12 +1,12 @@
-from abc import abstractmethod, ABC
+from abc import ABC
 
-from pyglet.math import Vec2
+from pyglet.math import Vec3
 
 
 class Entity(ABC):
     def __init__(self):
-        self.position = Vec2()
-        self.velocity = Vec2()
+        self.position = Vec3()
+        self.velocity = Vec3()
         self.rotation = 0
         self.drag = 1
         self.get_velocity_loss = self.get_entity_drag

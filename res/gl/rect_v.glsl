@@ -5,9 +5,10 @@ out vec2 texture_coord;
 
 uniform vec3 position;
 uniform float rotation;
-uniform float scale;
+uniform vec3 scale;
 
 uniform mat4 projection;
+uniform mat4 view;
 
 void
 main()
@@ -16,8 +17,8 @@ main()
     float c = cos(rotation);
 
     mat2 model_view = mat2(
-        scale * c, scale * s,
-        -scale * s, scale * c
+        scale.x * c, scale.x * s,
+        -scale.y * s, scale.y * c
     );
 
     texture_coord = vertex;
@@ -29,5 +30,5 @@ main()
         position.z,
         1.0
     );
-    gl_Position = projection * full_vertex;
+    gl_Position = projection * view * full_vertex;
 }

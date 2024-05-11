@@ -48,7 +48,7 @@ class Rect:
 
         glUniform3f(u_position, GLfloat(self.position_x),  GLfloat(self.position_y),  GLfloat(self.position_z))
         glUniform1f(u_rotation, GLfloat(self.rotation))
-        glUniform1f(u_scale, GLfloat(self.scale))
+        glUniform3f(u_scale, GLfloat(self.scale), GLfloat(self.scale), GLfloat(self.scale))
         projection_carray = (GLfloat * 16)(*projection)
         glUniformMatrix4fv(u_projection, 1, GL_FALSE, projection_carray)
 

@@ -9,7 +9,9 @@ class Camera:
         self.update_projection()
         self._view = Mat4()
         self.view_array = (GLfloat * 16)()
+        self.tracked_entity = None
         self.position = Vec3()
+        self.rotation = 0
         self.scale = 1.0
 
     @property
@@ -21,10 +23,19 @@ class Camera:
         self._projection = projection_matrix
         self.update_projection()
 
+    def track_entity(self, entity):
+        self.tracked_entity = entity
+
+    def stop_tracking(self):
+        self.tracked_entity = None
+
     def update(self):
-        self._view = Mat4.from_translation(self.position)
+        if self.tracked_entity is not None:
+            self.position = self.tracked_entity.position
+
         scale_vector = Vec3(self.scale, self.scale, self.scale)
-        self._view.scale(scale_vector)
+        self._view = Mat4().translate(-self.position * self.scale).scale(scale_vector)
+        print(self._view)
         self.update_view()
 
     def bind_to(self, u_projection, u_view):
