@@ -1,0 +1,27 @@
+{
+  "name": "6N4",
+  "type": "melee",
+  "class": "knife",
+  "ammo_count": null,
+  "ammo_type": null,
+
+  "fire_mode": "swing",
+  "fire_count": 1,
+  "fire_rate": 120,
+
+  "fx": {
+    "shot": null,
+    "case": null
+  },
+
+  "frames": {
+    "item": "tex.wpn.6n4-item",
+    "hold": "tex.wpn.6n4-hold0",
+    "shot": "tex.wpn.6n4-hold1"
+  },
+
+  "sounds": {
+    "shot": "snd.wpn.swing",
+    "shot_last": "snd.wpn.swing"
+  }
+}

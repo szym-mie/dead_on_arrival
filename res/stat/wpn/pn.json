@@ -1,5 +1,6 @@
 {
   "name": "PN",
+  "type": "ranged",
   "class": "pistol",
   "ammo_count": 11,
   "ammo_type": "stat.ammo.45acp",

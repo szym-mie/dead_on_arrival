@@ -1,15 +1,30 @@
 from abc import abstractmethod
-from pyglet.math import Vec2
 from src.entity.item import Item
+from src.entity.melee_weapon import MeleeWeapon
+from src.entity.ranged_weapon import RangedWeapon
+from src.resource.default_resource_packs import base_pack
 
 
 class Weapon(Item):
-    def __init__(self,name:str, damage:int, usage_cooldown:int, weapon_offset:Vec2):
-        super().__init__(name)
-        self.name = name
-        self.damage = damage
-        self.usage_cooldown = usage_cooldown
-        self.weapon_offset = weapon_offset
+    configs_getter = base_pack.unit_getter('stat.wpn')
+
+    def __init__(self, weapon_config):
+        super().__init__(weapon_config['name'])
+        self.weapon_type = weapon_config['type']
+        self.weapon_class = weapon_config['class']
+
+        self.ammo_count_max = weapon_config['ammo_count']
+        self.ammo_count = self.ammo_count_max
+
+        self.ammo_type = weapon_config['ammo_type']
+
+        self.fire_mode = weapon_config['fire_mode']
+        self.fire_count = weapon_config['fire_count']
+        self.fire_rate = weapon_config['fire_rate']
+
+        self.fx = weapon_config['fx']
+        self.frames = weapon_config['frames']
+        self.sounds = weapon_config['sounds']
 
     @abstractmethod
     def use(self):
@@ -22,3 +37,11 @@ class Weapon(Item):
     @abstractmethod
     def remaining_ammo(self):
         pass
+
+    @staticmethod
+    def create_weapon(weapon_id):
+        config = Weapon.configs_getter(weapon_id)
+        if config['type'] == 'melee':
+            return MeleeWeapon(config)
+        elif config['type'] == 'ranged':
+            return RangedWeapon(config)

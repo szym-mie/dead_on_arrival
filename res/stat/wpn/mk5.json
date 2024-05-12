@@ -1,5 +1,6 @@
 {
   "name": "MK5",
+  "type": "ranged",
   "class": "assault rifle",
   "ammo_count": 23,
   "ammo_type": "stat.ammo.223rem",

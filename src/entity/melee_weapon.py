@@ -1,7 +1,11 @@
 from src.entity.weapon import Weapon
+from src.entity.world import world
 
 
 class MeleeWeapon(Weapon):
+    def __init__(self, config):
+        super().__init__(config)
+
     def remaining_ammo(self):
         return 0
 
@@ -9,7 +13,4 @@ class MeleeWeapon(Weapon):
         return True
 
     def use(self):
-        pass
-
-    def __init__(self, name, damage, usage_cooldown, weapon_offset):
-        super().__init__(name, damage, usage_cooldown, weapon_offset)
+        world

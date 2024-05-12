@@ -1,19 +1,18 @@
 from src.entity.weapon import Weapon
-from src.entity.world import World
+from src.entity.world import world
 
 
 class RangedWeapon(Weapon):
-    def __init__(self,name, ammo, damage, usage_cooldown, weapon_offset):
-        super().__init__(name, damage, usage_cooldown, weapon_offset)
-        self.ammo = ammo
+    def __init__(self, config):
+        super().__init__(config)
 
     def use(self):
-        World.default()
+        world
 
     def can_be_used(self):
-        return self.ammo > 0
+        return self.ammo_count > 0
 
     def remaining_ammo(self):
-        return self.ammo
+        return self.ammo_count
 
 

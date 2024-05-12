@@ -1,5 +1,6 @@
 {
   "name": "Conda",
+  "type": "ranged",
   "class": "revolver",
   "ammo_count": 6,
   "ammo_type": "stat.ammo.40saw",

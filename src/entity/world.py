@@ -12,3 +12,5 @@ class World(Unit):
     def update(self, delta_time):
         pass
 
+
+world = World.default()

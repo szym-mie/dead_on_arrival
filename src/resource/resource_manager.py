@@ -102,6 +102,9 @@ class ResourceManager:
             Console.default() \
                 .log_warn(f'cannot find resource {res_id} in pack {self.pack_name}')
 
+    def unit_getter(self, unit_id):
+        return lambda res_id: self.get(f'{unit_id}.{res_id}')
+
     def _create_loader(self, loader_name, url):
         try:
             loader_class: Type[Loader] = self.loaders[loader_name]
