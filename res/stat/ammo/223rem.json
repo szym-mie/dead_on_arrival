@@ -1,0 +1,9 @@
+{
+  "velocity": 810,
+  "pellets": 1,
+  "base_spread": 0.1,
+  "base_damage": {
+    "0": 3,
+    "1": 2
+  }
+}

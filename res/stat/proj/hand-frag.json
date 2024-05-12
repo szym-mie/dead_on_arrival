@@ -1,0 +1,12 @@
+{
+  "velocity": 10,
+  "detonate_time": 4,
+  "detonate_on_hit": false,
+  "explosion": {
+    "radius": 4,
+    "damage": {
+      "0": 10,
+      "1": 7
+    }
+  }
+}

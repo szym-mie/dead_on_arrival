@@ -1,7 +1,7 @@
 {
   "name": "MK5",
   "class": "assault rifle",
-  "ammo_count": 30,
+  "ammo_count": 23,
   "ammo_type": "stat.ammo.223rem",
 
   "fire_mode": "burst",
