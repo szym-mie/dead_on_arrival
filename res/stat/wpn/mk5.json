@@ -1,0 +1,26 @@
+{
+  "name": "MK5",
+  "class": "assault rifle",
+  "ammo_count": 30,
+  "ammo_type": "stat.ammo.223rem",
+
+  "fire_mode": "burst",
+  "fire_count": 3,
+  "fire_rate": 700,
+
+  "fx": {
+    "shot": "fx.shot.rifle_low",
+    "case": "fx.case.rifle_low"
+  },
+
+  "frames": {
+    "item": "tex.wpn.mk5-item",
+    "hold": "tex.wpn.mk5-hold0",
+    "shot": "tex.wpn.mk5-hold1"
+  },
+
+  "sounds": {
+    "shot": "snd.wpn.mk5-shot",
+    "shot_last": "snd.wpn.mk5-shot-last"
+  }
+}

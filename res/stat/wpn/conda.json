@@ -1,0 +1,26 @@
+{
+  "name": "Conda",
+  "class": "revolver",
+  "ammo_count": 6,
+  "ammo_type": "stat.ammo.40sw",
+
+  "fire_mode": "semi",
+  "fire_count": 1,
+  "fire_rate": 90,
+
+  "fx": {
+    "shot": "fx.shot.revolver",
+    "case": null
+  },
+
+  "frames": {
+    "item": "tex.wpn.conda-item",
+    "hold": "tex.wpn.conda-hold0",
+    "shot": "tex.wpn.conda-hold0"
+  },
+
+  "sounds": {
+    "shot": "snd.wpn.conda-shot",
+    "shot_last": "snd.wpn.conda-shot-last"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "PN",
+  "class": "pistol",
+  "ammo_count": 11,
+  "ammo_type": "stat.ammo.45acp",
+
+  "fire_mode": "semi",
+  "fire_count": 1,
+  "fire_rate": 240,
+
+  "fx": {
+    "shot": "fx.shot.pistol",
+    "case": "fx.case.pistol"
+  },
+
+  "frames": {
+    "item": "tex.wpn.pn-item",
+    "hold": "tex.wpn.pn-hold0",
+    "shot": "tex.wpn.pn-hold1"
+  },
+
+  "sounds": {
+    "shot": "snd.wpn.pn-shot",
+    "shot_last": "snd.wpn.pn-shot-last"
+  }
+}
