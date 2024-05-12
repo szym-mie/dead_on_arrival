@@ -1,0 +1,16 @@
+{
+  "name": "Infantry Gunner",
+
+  "hp": 6,
+  "ap": 2,
+
+  "move_speed": 4,
+
+  "frames": {
+    "upper": "tex.char.regular_upper",
+    "lower": "tex.char.regular_lower"
+  },
+
+  "weapons": [],
+  "is_player": false
+}

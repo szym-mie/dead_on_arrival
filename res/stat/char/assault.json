@@ -1,0 +1,16 @@
+{
+  "name": "Navy Assault Team",
+
+  "hp": 10,
+  "ap": 8,
+
+  "move_speed": 3,
+
+  "frames": {
+    "upper": "tex.char.assault_upper",
+    "lower": "tex.char.assault_lower"
+  },
+
+  "weapons": [],
+  "is_player": false
+}

@@ -1,1 +1,1 @@
-python3 build/src/export_img.py gimp
+python3 _build/src/export_img.py gimp

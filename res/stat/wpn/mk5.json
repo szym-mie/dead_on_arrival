@@ -14,11 +14,7 @@
     "case": "fx.case.rifle_low"
   },
 
-  "frames": {
-    "item": "tex.wpn.mk5-item",
-    "hold": "tex.wpn.mk5-hold0",
-    "shot": "tex.wpn.mk5-hold1"
-  },
+  "anim": "anim.wpn.mk5",
 
   "sounds": {
     "shot": "snd.wpn.mk5-shot",

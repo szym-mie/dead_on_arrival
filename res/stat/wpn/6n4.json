@@ -14,11 +14,7 @@
     "case": null
   },
 
-  "frames": {
-    "item": "tex.wpn.6n4-item",
-    "hold": "tex.wpn.6n4-hold0",
-    "shot": "tex.wpn.6n4-hold1"
-  },
+  "anim": "anim.wpn.6n4",
 
   "sounds": {
     "shot": "snd.wpn.swing",

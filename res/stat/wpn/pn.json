@@ -14,11 +14,7 @@
     "case": "fx.case.pistol"
   },
 
-  "frames": {
-    "item": "tex.wpn.pn-item",
-    "hold": "tex.wpn.pn-hold0",
-    "shot": "tex.wpn.pn-hold1"
-  },
+  "anim": "anim.wpn.pn",
 
   "sounds": {
     "shot": "snd.wpn.pn-shot",

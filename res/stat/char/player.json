@@ -1,0 +1,16 @@
+{
+  "name": "Special Tasking Group \"Black Sharks\"",
+
+  "hp": 10,
+  "ap": 6,
+
+  "move_speed": 5,
+
+  "frames": {
+    "upper": "tex.char.player_upper",
+    "lower": "tex.char.player_lower"
+  },
+
+  "weapons": ["6n4"],
+  "is_player": true
+}

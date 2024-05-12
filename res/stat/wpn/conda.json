@@ -14,11 +14,7 @@
     "case": null
   },
 
-  "frames": {
-    "item": "tex.wpn.conda-item",
-    "hold": "tex.wpn.conda-hold0",
-    "shot": "tex.wpn.conda-hold0"
-  },
+  "anim": "anim.wpn.conda",
 
   "sounds": {
     "shot": "snd.wpn.conda-shot",

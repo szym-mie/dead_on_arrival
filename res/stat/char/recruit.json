@@ -1,0 +1,16 @@
+{
+  "name": "Infantry Guard",
+
+  "hp": 6,
+  "ap": 0,
+
+  "move_speed": 3,
+
+  "frames": {
+    "upper": "tex.char.recruit_upper",
+    "lower": "tex.char.recruit_lower"
+  },
+
+  "weapons": [],
+  "is_player": false
+}
