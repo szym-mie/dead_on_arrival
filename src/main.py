@@ -6,7 +6,6 @@ from pyglet.math import Mat4, Vec3
 from pyglet.sprite import Sprite
 from pyglet.window import Window
 
-from src.animation.frame import Frame
 from src.entity.create_character import create_character
 from src.graphics.camera import Camera
 from src.graphics.rect import Rect
@@ -29,13 +28,11 @@ bullet_image = base_pack.get('tex.proj.tracer-oran0')
 bullet_image.anchor_x = bullet_image.width // 2
 bullet_image.anchor_y = bullet_image.height // 2
 bullet_sprite = Sprite(bullet_image)
-bullet_frame = Frame(bullet_sprite, None, None, None, None)
 # player_image = image.load(base_pack.get('tex.player.default_player_image'))
 player_image = base_pack.get('tex.player.default_player_image')
 player_image.anchor_x = player_image.width // 2
 player_image.anchor_y = player_image.height // 2
 player_sprite = Sprite(player_image)
-frame = Frame(player_sprite, None, None, None, None)
 
 controls.define_binds(conf_pack.get('binds'))
 controls.attach_to_window(window)
@@ -90,7 +87,7 @@ def on_draw():
     print(camera.position)
 
     level.draw(-player.position.x * 64 + 640, -player.position.y * 64 + 360)
-    player.draw()
+    # player.draw()
     test_rect.rotation += 0.01
     test_rect.draw(projection)
     test_rect_proto.draw(camera)

@@ -8,6 +8,14 @@
     "email": "szym.mie@gmail.com"
   },
   "data": {
+    "anim": {
+      "#search": {
+        "path": "anim/",
+        "loader": "json",
+        "load_later": true,
+        "max_layers": 16
+      }
+    },
     "tex": {
       "#search": {
         "path": "tex/",

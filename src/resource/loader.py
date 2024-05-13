@@ -1,8 +1,12 @@
-class Loader:
+from abc import ABC, abstractmethod
+
+
+class Loader(ABC):
     def __init__(self, url):
         self.url = url
 
-    def load(self):
+    @abstractmethod
+    def load(self, resource_manager):
         return NotImplemented
 
     def map_open(self, file_type: str, map_fn):
@@ -14,3 +18,13 @@ class Loader:
             mode = 'rb'
             with open(self.url, mode) as file:
                 return map_fn(self.url, file)
+
+
+registered_loaders = {}
+
+
+def register_loader(loader_id):
+    def _register_decorator(cls):
+        registered_loaders[loader_id] = cls
+        return cls
+    return _register_decorator

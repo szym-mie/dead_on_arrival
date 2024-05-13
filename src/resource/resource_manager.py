@@ -2,12 +2,8 @@ from pathlib import Path
 from typing import Any, Type
 
 from src.resource.empty_loader import EmptyLoader
-from src.resource.frame_loader import FrameLoader
-from src.resource.image_loader import ImageLoader
-from src.resource.loader import Loader
-from src.resource.sound_loader import SoundLoader
-from src.resource.text_loader import TextLoader
 from src.resource.json_loader import JSONLoader
+from src.resource.loader import Loader, registered_loaders
 from src.resource.resource import Resource
 from src.util.console import Console, console
 
@@ -22,14 +18,7 @@ class ResourceManager:
         self.pack_name = 'UNKNOWN'
         self.pack_release = 'UNKNOWN'
 
-        self.loaders = {
-            'empty': EmptyLoader,
-            'text': TextLoader,
-            'json': JSONLoader,
-            'animation': FrameLoader,
-            'image': ImageLoader,
-            'sound': SoundLoader
-        }
+        self.loaders = registered_loaders
 
         self.entry_commands = {
             'get': lambda entry: self._command_get(entry),
@@ -37,7 +26,7 @@ class ResourceManager:
         }
 
     def reload_pack(self):
-        pack_info = JSONLoader(self.pack_info_url).load()
+        pack_info = JSONLoader(self.pack_info_url).load(self)
 
         console.log_event(f'loading pack at URL {self.pack_info_url}')
 
@@ -108,7 +97,7 @@ class ResourceManager:
 
     def _url_only_resource(self, path):
         rel_url = self._get_base_path(path).relative_to(self.base_url)
-        return Resource(str(rel_url), EmptyLoader(None), False)
+        return Resource(str(rel_url), self, EmptyLoader(None), False)
 
     def _command_get(self, entry):
         path = entry.get('path')
@@ -117,7 +106,7 @@ class ResourceManager:
 
         file_path = self._get_base_path(path)
         loader_instance = self._create_loader(loader, file_path)
-        return Resource(file_path, loader_instance, load_later)
+        return Resource(file_path, self, loader_instance, load_later)
 
     def _command_search(self, entry):
         path = entry.get('path')
@@ -143,7 +132,7 @@ class ResourceManager:
                                                        max_layers - 1)
         for file_path in filter(lambda p: p.is_file(), children):
             loader_instance = self._create_loader(loader, file_path)
-            entries[file_path.stem] = Resource(file_path, loader_instance, load_later)
+            entries[file_path.stem] = Resource(file_path, self, loader_instance, load_later)
 
         return entries
 
