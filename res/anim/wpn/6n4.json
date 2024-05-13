@@ -1,0 +1,15 @@
+[
+  {
+    "tex": "tex.wpn.mk5-item",
+    "next": null
+  },
+  {
+    "tex": "tex.wpn.mk5-hold0",
+    "next": null
+  },
+  {
+    "tex": "tex.wpn.mk5-hold1",
+    "next": 1,
+    "delay": 0.05
+  }
+]

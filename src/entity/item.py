@@ -1,3 +1,5 @@
+from abc import abstractmethod
+
 from src.entity.entity import Entity
 
 
@@ -13,6 +15,14 @@ class Item(Entity):
 
     def on_drop(self, entity):
         self.is_picked_up = False
+
+    @abstractmethod
+    def start_use(self):
+        pass
+
+    @abstractmethod
+    def stop_use(self):
+        pass
 
     def __repr__(self):
         return f'Item: {self.name}'

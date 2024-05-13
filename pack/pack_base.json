@@ -16,6 +16,14 @@
         "max_layers": 16
       }
     },
+    "stat": {
+      "#search": {
+        "path": "stat/",
+        "loader": "json",
+        "load_later": false,
+        "max_layers": 16
+      }
+    },
     "gl": {
       "#search": {
         "path": "gl/",

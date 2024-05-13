@@ -54,3 +54,6 @@ class Controls(Unit):
 
     def get_bind(self, bind):
         return self.is_pressed(self.bind_map.get(bind, ''))
+
+
+controls = Controls.default()

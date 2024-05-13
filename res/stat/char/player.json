@@ -6,7 +6,7 @@
 
   "move_speed": 5,
 
-  "frames": {
+  "anim": {
     "upper": "tex.char.player_upper",
     "lower": "tex.char.player_lower"
   },

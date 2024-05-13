@@ -45,7 +45,7 @@ items = [
     CaseItem(type=RangedWeapon(name='pb', ammo=20, damage=7, usage_cooldown=20, weapon_offset=Vec2(10, 10)), weight=20),
     CaseItem(type=MedKit(name='medkit', heal_percentage=0.2), weight=30),
     CaseItem(type=MeleeWeapon(name="Axe", damage=12, usage_cooldown=30, weapon_offset=Vec2(10, 10)), weight=20),
-    CaseItem(type=MeleeWeapon(name='6n4', damage=5, usage_cooldown=20, weapon_offset=Vec2(10, 10)), weight=7),
+    CaseItem(type=MeleeWeapon(name='6n4.json', damage=5, usage_cooldown=20, weapon_offset=Vec2(10, 10)), weight=7),
     CaseItem(type=MeleeWeapon(name='k2000', damage=9, usage_cooldown=15, weapon_offset=Vec2(10, 10)), weight=8),
     CaseItem(type=RangedWeapon(name='vls', ammo=30, damage=20, usage_cooldown=11, weapon_offset=Vec2(10, 10)), weight=2),
     CaseItem(type=RangedWeapon(name='mk-5', ammo=80, damage=16, usage_cooldown=8, weapon_offset=Vec2(10, 10)), weight=9),

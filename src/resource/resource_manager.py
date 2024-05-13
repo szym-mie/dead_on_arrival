@@ -9,7 +9,7 @@ from src.resource.sound_loader import SoundLoader
 from src.resource.text_loader import TextLoader
 from src.resource.json_loader import JSONLoader
 from src.resource.resource import Resource
-from src.util.console import Console
+from src.util.console import Console, console
 
 
 class ResourceManager:
@@ -26,7 +26,7 @@ class ResourceManager:
             'empty': EmptyLoader,
             'text': TextLoader,
             'json': JSONLoader,
-            'frame': FrameLoader,
+            'animation': FrameLoader,
             'image': ImageLoader,
             'sound': SoundLoader
         }
@@ -39,15 +39,13 @@ class ResourceManager:
     def reload_pack(self):
         pack_info = JSONLoader(self.pack_info_url).load()
 
-        Console.default() \
-            .log_event(f'loading pack at URL {self.pack_info_url}')
+        console.log_event(f'loading pack at URL {self.pack_info_url}')
 
         try:
             pack_data = pack_info['data']
             pack_meta = pack_info['meta']
         except KeyError:
-            Console.default() \
-                .log_warn(f'malformed pack at URL {self.pack_info_url}')
+            console.log_warn(f'malformed pack at URL {self.pack_info_url}')
             return None
 
         try:
@@ -57,8 +55,7 @@ class ResourceManager:
             self.pack_name = pack_name
             self.pack_release = pack_release
         except KeyError:
-            Console.default() \
-                .log_warn(f'missing metadata from pack at URL {self.pack_info_url}')
+            console.log_warn(f'missing metadata from pack at URL {self.pack_info_url}')
             return None
 
         def parse_entry_key(parents, pack_tree, next_key, next_entry):
@@ -67,8 +64,7 @@ class ResourceManager:
                 if entry_command is not None:
                     walk(parents, pack_tree, entry_command(next_entry))
                 else:
-                    Console.default() \
-                        .log_warn(f'unknown pack command {next_key}')
+                    console.log_warn(f'unknown pack command {next_key}')
             else:
                 walk(parents + [next_key], pack_tree, next_entry)
 
@@ -92,15 +88,13 @@ class ResourceManager:
         self.pack = {}
         walk([], self.pack, pack_data)
 
-        Console.default() \
-            .log_event(f'loaded pack {pack_name}@{pack_release}')
+        console.log_event(f'loaded pack {pack_name}@{pack_release}')
 
     def get(self, res_id):
         try:
             return self.pack[res_id].get()
         except KeyError:
-            Console.default() \
-                .log_warn(f'cannot find resource {res_id} in pack {self.pack_name}')
+            console.log_warn(f'cannot find resource {res_id} in pack {self.pack_name}')
 
     def unit_getter(self, unit_id):
         return lambda res_id: self.get(f'{unit_id}.{res_id}')
@@ -110,8 +104,7 @@ class ResourceManager:
             loader_class: Type[Loader] = self.loaders[loader_name]
             return loader_class(url)
         except KeyError:
-            Console.default() \
-                .log_warn(f'cannot find loader {loader_name} in pack {self.pack_name}')
+            console.log_warn(f'cannot find loader {loader_name} in pack {self.pack_name}')
 
     def _url_only_resource(self, path):
         rel_url = self._get_base_path(path).relative_to(self.base_url)
@@ -138,8 +131,7 @@ class ResourceManager:
                                      load_later,
                                      max_layers)
         except KeyError:
-            Console.default() \
-                .log_warn(f'cannot find loader {loader} in pack {self.pack_name}')
+            console.log_warn(f'cannot find loader {loader} in pack {self.pack_name}')
 
     def _search_path(self, path: Path, loader: Loader, load_later, max_layers):
         entries = {}

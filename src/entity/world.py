@@ -1,10 +1,9 @@
-from src.level.level import Level
 from src.util.unit import Unit
 
 
 class World(Unit):
-    def __init__(self):
-        self.level = Level.empty()
+    def __init__(self, level):
+        self.level = level
 
     def spawn(self, entity, x, y):
         pass

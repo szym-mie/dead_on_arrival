@@ -3,15 +3,20 @@ from src.entity.item import Item
 from src.entity.melee_weapon import MeleeWeapon
 from src.entity.ranged_weapon import RangedWeapon
 from src.resource.default_resource_packs import base_pack
+from src.util.console import console
 
 
 class Weapon(Item):
     configs_getter = base_pack.unit_getter('stat.wpn')
 
+    # TODO use dict.get to retrieve values without KeyErrors
+
     def __init__(self, weapon_config):
         super().__init__(weapon_config['name'])
         self.weapon_type = weapon_config['type']
         self.weapon_class = weapon_config['class']
+
+        self.is_used = False
 
         self.ammo_count_max = weapon_config['ammo_count']
         self.ammo_count = self.ammo_count_max
@@ -22,13 +27,18 @@ class Weapon(Item):
         self.fire_count = weapon_config['fire_count']
         self.fire_rate = weapon_config['fire_rate']
 
+        self.fire_delay = 60 / self.fire_rate
+        self.rounds_to_fire = self.fire_count
+
         self.fx = weapon_config['fx']
         self.frames = weapon_config['frames']
         self.sounds = weapon_config['sounds']
 
-    @abstractmethod
-    def use(self):
-        pass
+    def start_use(self):
+        self.is_used = True
+
+    def stop_use(self):
+        self.is_used = False
 
     @abstractmethod
     def can_be_used(self):
@@ -41,7 +51,10 @@ class Weapon(Item):
     @staticmethod
     def create_weapon(weapon_id):
         config = Weapon.configs_getter(weapon_id)
-        if config['type'] == 'melee':
+        weapon_type = config.get('type')
+        if weapon_type == 'melee':
             return MeleeWeapon(config)
-        elif config['type'] == 'ranged':
+        elif weapon_type == 'ranged':
             return RangedWeapon(config)
+        else:
+            console.log_warn('unknown weapon type' + weapon_type)

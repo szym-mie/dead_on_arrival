@@ -68,8 +68,10 @@ class MeshMaterial:
         compile_status = GLint()
         glGetShaderiv(shader, GL_COMPILE_STATUS, compile_status)
         if compile_status.value == GL_FALSE:
-            info_log_array = c_buffer(256)
-            glGetShaderInfoLog(shader, 256, None, info_log_array)
+            info_log_length = GLint()
+            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, info_log_length)
+            info_log_array = c_buffer(info_log_length.value)
+            glGetShaderInfoLog(shader, info_log_length, None, info_log_array)
             info_log = bytearray(info_log_array).decode('utf-8')
             raise RuntimeError(f'shader compilation failed:\n{info_log}\nsource:\n{shader_source}')
         return shader
@@ -83,8 +85,10 @@ class MeshMaterial:
         link_status = GLint()
         glGetProgramiv(program, GL_LINK_STATUS, link_status)
         if link_status.value == GL_FALSE:
-            info_log_array = c_buffer(256)
-            glGetProgramInfoLog(program, 256, None, info_log_array)
+            info_log_length = GLint()
+            glGetProgramiv(program, GL_INFO_LOG_LENGTH, info_log_length)
+            info_log_array = c_buffer(info_log_length.value)
+            glGetProgramInfoLog(program, info_log_length, None, info_log_array)
             info_log = bytearray(info_log_array).decode('utf-8')
             raise RuntimeError(f'program link failed:\n{info_log}')
         return program

@@ -49,3 +49,6 @@ class Console(Unit):
             return abs_str.upper()
         else:
             return abs_str.lower()
+
+
+console = Console.default()

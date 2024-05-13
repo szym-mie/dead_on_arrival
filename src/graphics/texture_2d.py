@@ -1,7 +1,7 @@
 from pyglet.gl import *
 
 
-class Texture:
+class Texture2D:
     def __init__(self, image):
         self.texture_handler = GLuint()
         glGenTextures(1, self.texture_handler)

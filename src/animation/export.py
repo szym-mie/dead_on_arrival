@@ -1,6 +1,6 @@
 from typing import Callable, Any
 
-from src.frame.frame_manager import FrameManager
+from src.animation.frame_manager import FrameManager
 
 
 class FrameMethod:

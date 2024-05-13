@@ -2,8 +2,8 @@ import unittest
 
 
 from tests.run_test import run_test
-from src.frame.export import frame_method
-from src.frame.frame_manager import FrameManager
+from src.animation.export import frame_method
+from src.animation.frame_manager import FrameManager
 
 
 @run_test

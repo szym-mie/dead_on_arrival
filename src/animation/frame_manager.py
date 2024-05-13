@@ -1,5 +1,5 @@
 from __future__ import annotations
-import src.frame.export as frame_export
+import src.animation.export as frame_export
 
 
 class FrameManager:

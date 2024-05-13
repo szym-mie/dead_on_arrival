@@ -13,7 +13,7 @@ for image_in, rel_path in find_files("**/*.xcf", "src/tex/"):
     image_out = Path("tex/").joinpath(rel_path).with_suffix('.png')
 
     export_script = read_script_from_file(
-        "build/src/export.scm",
+        "_build/src/export.scm",
         {"in": image_in.as_posix(), "out": image_out.as_posix()})
 
     create_filepath(image_out)

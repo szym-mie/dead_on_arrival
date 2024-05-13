@@ -6,7 +6,7 @@
 
   "move_speed": 6,
 
-  "frames": {
+  "anim": {
     "upper": "tex.char.specops_upper",
     "lower": "tex.char.specops_lower"
   },

@@ -1,20 +1,20 @@
 from math import floor, ceil
 
+from pyglet import clock, app
 from pyglet.gl import glClear, GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, GLfloat, GLdouble, glClearDepth, glClearColor
 from pyglet.math import Mat4, Vec3
 from pyglet.sprite import Sprite
 from pyglet.window import Window
-from pyglet import clock, app
 
-from src.entity.player import Player
-from src.frame.frame import Frame
+from src.animation.frame import Frame
+from src.entity.create_character import create_character
 from src.graphics.camera import Camera
 from src.graphics.rect import Rect
 from src.graphics.rect_prototype import RectPrototype
 from src.level.level import Level
 from src.level.level_import import LevelImport
 from src.resource.default_resource_packs import base_pack, conf_pack, load_all
-from src.util.controls import Controls
+from src.util.controls import controls
 
 window = Window(caption='test', width=1280, height=720)
 
@@ -37,8 +37,6 @@ player_image.anchor_y = player_image.height // 2
 player_sprite = Sprite(player_image)
 frame = Frame(player_sprite, None, None, None, None)
 
-controls = Controls.default()
-
 controls.define_binds(conf_pack.get('binds'))
 controls.attach_to_window(window)
 
@@ -51,7 +49,7 @@ print(pix)
 
 level = Level(wall_image, floor_image, LevelImport.from_bitmap(24, 24, pix, []))
 
-player = Player(frame, bullet_frame, level)
+player = create_character('player')
 player.position.x = 3
 player.position.y = 3
 
@@ -93,8 +91,6 @@ def on_draw():
 
     level.draw(-player.position.x * 64 + 640, -player.position.y * 64 + 360)
     player.draw()
-    for bullet in player.bullet_group:
-        bullet.draw()
     test_rect.rotation += 0.01
     test_rect.draw(projection)
     test_rect_proto.draw(camera)
@@ -102,9 +98,6 @@ def on_draw():
 
 def update(delta_time):
     player.update(delta_time)
-
-    for bullet in player.bullet_group:
-        bullet.update(delta_time)
 
     if level.get_tile_at(player.position.x, player.position.y - 0.8) == 0:  # up
         player.position.y = floor(player.position.y) + 0.8

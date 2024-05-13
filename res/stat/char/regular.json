@@ -6,7 +6,7 @@
 
   "move_speed": 4,
 
-  "frames": {
+  "anim": {
     "upper": "tex.char.regular_upper",
     "lower": "tex.char.regular_lower"
   },

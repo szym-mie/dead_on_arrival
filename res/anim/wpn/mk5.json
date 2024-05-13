@@ -1,0 +1,15 @@
+[
+  {
+    "tex": "tex.wpn.6n4-item",
+    "next": null
+  },
+  {
+    "tex": "tex.wpn.6n4-hold0",
+    "next": null
+  },
+  {
+    "tex": "tex.wpn.6n4-hold1",
+    "next": 1,
+    "delay": 0.5
+  }
+]
