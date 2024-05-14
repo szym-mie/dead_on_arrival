@@ -79,9 +79,10 @@ class Player(Character):
 
         x_change_mouse_player = controls.mouse_x - 640
         y_change_mouse_player = controls.mouse_y - 360
-        self.rotation = -atan2(y_change_mouse_player, x_change_mouse_player) * 180 / pi
+        self.rotation = atan2(y_change_mouse_player, x_change_mouse_player) - pi / 2
 
     def update(self, delta_time):
         self.time += delta_time
         self.update_motion(delta_time)
         self.react_to_control()
+        self.update_weapon_offset()

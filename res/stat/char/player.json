@@ -4,7 +4,7 @@
   "hp": 10,
   "ap": 6,
 
-  "move_speed": 5,
+  "move_speed": 10,
 
   "anim": {
     "upper": "tex.char.player_upper",

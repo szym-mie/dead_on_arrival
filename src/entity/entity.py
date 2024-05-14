@@ -29,7 +29,7 @@ class Entity(ABC):
             next_magnitude = max(last_magnitude - self.get_velocity_loss(delta_time), 0)
             scale = next_magnitude / last_magnitude
             self.velocity *= scale
-            self.position += self.velocity
+            self.position += self.velocity * delta_time
 
     def update(self, delta_time):
         self.time += delta_time

@@ -26,7 +26,7 @@ class Weapon(Item):
         self.rounds_to_fire = self.fire_count
 
         self.fx = weapon_config['fx']
-        self.frames = weapon_config['frames']
+        self.frames = weapon_config['anim']
         self.sounds = weapon_config['sounds']
 
     def start_use(self):

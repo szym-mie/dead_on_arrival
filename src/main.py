@@ -7,6 +7,7 @@ from pyglet.sprite import Sprite
 from pyglet.window import Window
 
 from src.entity.create_character import create_character
+from src.entity.create_weapon import create_weapon
 from src.graphics.camera import Camera
 from src.graphics.rect import Rect
 from src.graphics.rect_prototype import RectPrototype
@@ -19,20 +20,12 @@ window = Window(caption='test', width=1280, height=720)
 
 load_all()
 
-# wall_image = image.load(base_pack.get('tex.lvl.wall-d0h0-full0'))
-# floor_image = image.load(base_pack.get('tex.lvl.floor-full0'))
-# bullet_image = image.load(base_pack.get('tex.proj.tracer-oran0'))
 wall_image = base_pack.get('tex.lvl.wall-d0h0-full0')
 floor_image = base_pack.get('tex.lvl.floor-full0')
+
 bullet_image = base_pack.get('tex.proj.tracer-oran0')
-bullet_image.anchor_x = bullet_image.width // 2
-bullet_image.anchor_y = bullet_image.height // 2
-bullet_sprite = Sprite(bullet_image)
-# player_image = image.load(base_pack.get('tex.player.default_player_image'))
+item_image = base_pack.get('tex.wpn.mk5-hold0')
 player_image = base_pack.get('tex.player.default_player_image')
-player_image.anchor_x = player_image.width // 2
-player_image.anchor_y = player_image.height // 2
-player_sprite = Sprite(player_image)
 
 controls.define_binds(conf_pack.get('binds'))
 controls.attach_to_window(window)
@@ -46,9 +39,16 @@ print(pix)
 
 level = Level(wall_image, floor_image, LevelImport.from_bitmap(24, 24, pix, []))
 
+item_rect = RectPrototype(item_image) \
+    .create_mesh(Vec3(0, 0, 0), 0, Vec3(1, 1, 1))
+item = create_weapon('mk5')
+
+player_rect = RectPrototype(player_image) \
+    .create_mesh(Vec3(0, 0, 0), 0, Vec3(1, 1, 1))
 player = create_character('player')
 player.position.x = 3
 player.position.y = 3
+player.weapon = item
 
 tx = 0
 
@@ -85,11 +85,14 @@ def on_draw():
     camera.position = player.position
     camera.update()
     print(camera.position)
+    player_rect.position = player.position
+    player_rect.rotation = player.rotation
+    item_rect.position = player.weapon_position
+    item_rect.rotation = player.rotation
 
     level.draw(-player.position.x * 64 + 640, -player.position.y * 64 + 360)
-    # player.draw()
-    test_rect.rotation += 0.01
-    test_rect.draw(projection)
+    player_rect.draw(camera)
+    item_rect.draw(camera)
     test_rect_proto.draw(camera)
 
 
