@@ -26,7 +26,7 @@ class Weapon(Item):
         self.fire_rate = weapon_config['fire_rate']
 
         self.fire_delay = 60 / self.fire_rate
-        self.rounds_to_fire = self.fire_count
+        self.rounds_to_fire = 0
 
         self.fx = weapon_config['fx']
         self.anim = weapon_config['anim']
@@ -46,12 +46,15 @@ class Weapon(Item):
         self.is_used = False
 
     def fire(self):
-        if self.rounds_to_fire > 0:
-            if self.rounds_to_fire > 1 or self.fire_count == 1:
+        if self.rounds_to_fire > 0 and self.can_be_used():
+            self.player.next_source()
+            if (self.rounds_to_fire > 1 or self.fire_count == 1) and self.ammo_count > 1:
                 self.player.queue(self.shot_sound)
             else:
                 self.player.queue(self.shot_last_sound)
             self.rounds_to_fire -= 1
+            self.ammo_count -= 1
+            print(self.ammo_count)
             self.player.seek(0)
             self.player.play()
 
@@ -67,8 +70,7 @@ class Weapon(Item):
         self.time += delta_time
         self.update_motion(delta_time)
         new_fire_time = self.fire_time + delta_time
-        while self.is_used and new_fire_time > self.fire_delay:
+        while new_fire_time > self.fire_delay:
             self.fire()
-            print('fire?')
             new_fire_time -= self.fire_delay
         self.fire_time = new_fire_time
