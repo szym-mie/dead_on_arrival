@@ -1,19 +1,9 @@
-import unittest
-from tests.run_test import run_test
-from src.collision.sprite_collision import SpriteCollision, collide
-import pyglet
-
-
-
-@run_test
-class MyTestCase(unittest.TestCase):
-    pass
-
 
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-
+from src.collision.sprite_collision import SpriteCollision, collide
+import pyglet
 
 window = pyglet.window.Window(SCREEN_WIDTH, SCREEN_HEIGHT, caption="Masks")
 
@@ -34,8 +24,8 @@ class Soldier(pyglet.sprite.Sprite):
 class Bullet(pyglet.sprite.Sprite):
     def __init__(self, batch=None):
         super().__init__(img=pyglet.image.SolidColorImagePattern((*self.color,  200)).create_image(10, 10), batch=batch)
-        self.color = (255, 0, 0)
         self.default_color = (255, 0, 0)
+        self.color = self.default_color
 
     def update(self, dt):
         pos = window._mouse_x, window._mouse_y
@@ -47,7 +37,6 @@ window.set_mouse_visible(False)
 
 soldier_batch = pyglet.graphics.Batch()
 bullet_batch = pyglet.graphics.Batch()
-
 
 soldier = Soldier(300, 200, batch=soldier_batch)
 bullet = Bullet(batch=bullet_batch)
@@ -61,10 +50,9 @@ def on_draw():
     soldier_batch.draw()
     bullet_batch.draw()
 
-    if collide(soldier_sprite_collision, bullet_sprite_collision):
-        bullet.color = (0, 255, 0)
-    else:
-        bullet.color = bullet.default_color
+    if collide(soldier, bullet):
+        print(f'Prefect pixel collision found')
+
 
 def update(dt):
     bullet.update(dt)
