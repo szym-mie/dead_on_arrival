@@ -2,7 +2,7 @@ class Animation:
     def __init__(self, animation_prototype):
         self.time = 0.0
         self.frame_index = 0
-        self.frames = animation_prototype.frames
+        self.frames = animation_prototype.anim
         self.frame = self.frames[self.frame_index]
         self.frame_time = 0
         self.paused = False

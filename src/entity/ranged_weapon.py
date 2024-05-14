@@ -1,5 +1,4 @@
 from src.entity.weapon import Weapon
-from src.entity.world import world
 
 
 class RangedWeapon(Weapon):

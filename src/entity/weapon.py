@@ -1,6 +1,9 @@
 from abc import abstractmethod
 
+from pyglet.media import PlayerGroup, Player
+
 from src.entity.item import Item
+from src.resource.default_resource_packs import base_pack
 
 
 class Weapon(Item):
@@ -26,14 +29,31 @@ class Weapon(Item):
         self.rounds_to_fire = self.fire_count
 
         self.fx = weapon_config['fx']
-        self.frames = weapon_config['anim']
+        self.anim = weapon_config['anim']
         self.sounds = weapon_config['sounds']
+
+        self.shot_sound = base_pack.get(self.sounds['shot'])
+        self.shot_last_sound = base_pack.get(self.sounds['shot_last'])
+
+        self.player = Player()
 
     def start_use(self):
         self.is_used = True
+        self.rounds_to_fire = self.fire_count
+        self.fire_time = 0.0
 
     def stop_use(self):
         self.is_used = False
+
+    def fire(self):
+        if self.rounds_to_fire > 0:
+            if self.rounds_to_fire > 1 or self.fire_count == 1:
+                self.player.queue(self.shot_sound)
+            else:
+                self.player.queue(self.shot_last_sound)
+            self.rounds_to_fire -= 1
+            self.player.seek(0)
+            self.player.play()
 
     @abstractmethod
     def can_be_used(self):
@@ -42,3 +62,13 @@ class Weapon(Item):
     @abstractmethod
     def remaining_ammo(self):
         pass
+
+    def update(self, delta_time):
+        self.time += delta_time
+        self.update_motion(delta_time)
+        new_fire_time = self.fire_time + delta_time
+        while self.is_used and new_fire_time > self.fire_delay:
+            self.fire()
+            print('fire?')
+            new_fire_time -= self.fire_delay
+        self.fire_time = new_fire_time

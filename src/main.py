@@ -84,7 +84,6 @@ def on_draw():
 
     camera.position = player.position
     camera.update()
-    print(camera.position)
     player_rect.position = player.position
     player_rect.rotation = player.rotation
     item_rect.position = player.weapon_position
@@ -98,6 +97,7 @@ def on_draw():
 
 def update(delta_time):
     player.update(delta_time)
+    item.update(delta_time)
 
     if level.get_tile_at(player.position.x, player.position.y - 0.8) == 0:  # up
         player.position.y = floor(player.position.y) + 0.8

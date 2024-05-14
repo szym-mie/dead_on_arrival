@@ -7,7 +7,10 @@ class Item(Entity):
     def __init__(self, name):
         super().__init__()
         self.get_velocity_loss = self.get_item_drag
+
         self.is_picked_up = False
+        self.is_used = False
+        self.fire_time = 0.0
         self.name = name
 
     def on_grab(self, entity):

@@ -73,9 +73,18 @@ class Player(Character):
             self.velocity.x = -self.move_speed
             self.is_walking = True
 
-        if controls.get_bind("fire_weapon"):
-            self.attack()
-            self.is_shooting = True
+        use_item_pressed = controls.get_bind('use_item')
+
+        if use_item_pressed and not self.is_shooting:
+            print('start shoot')
+            if self.weapon is not None:
+                self.weapon.start_use()
+                self.is_shooting = True
+        if not use_item_pressed and self.is_shooting:
+            print('stop shoot')
+            if self.weapon is not None:
+                self.weapon.stop_use()
+                self.is_shooting = False
 
         x_change_mouse_player = controls.mouse_x - 640
         y_change_mouse_player = controls.mouse_y - 360

@@ -24,6 +24,14 @@
         "max_layers": 16
       }
     },
+    "snd": {
+      "#search": {
+        "path": "snd/",
+        "loader": "sound",
+        "load_later": false,
+        "max_layers": 16
+      }
+    },
     "stat": {
       "#search": {
         "path": "stat/",

@@ -35,7 +35,6 @@ class Camera:
 
         scale_vector = Vec3(self.scale, self.scale, self.scale)
         self._view = Mat4().translate(-self.position * self.scale).scale(scale_vector)
-        print(self._view)
         self.update_view()
 
     def bind_to(self, u_projection, u_view):
