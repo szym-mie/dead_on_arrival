@@ -1,10 +1,10 @@
 {
   "velocity": 10,
-  "detonate_time": 4,
-  "detonate_on_hit": false,
   "explosion": {
+    "detonate_time": 4,
+    "detonate_on_hit": false,
     "radius": 4,
-    "damage": {
+    "base_damage": {
       "0": 10,
       "1": 7
     }

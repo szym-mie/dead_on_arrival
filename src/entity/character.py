@@ -30,7 +30,7 @@ class Character(Entity):
 
     def update_weapon_offset(self):
         if self.weapon is not None:
-            weapon_offset = Vec3(0.3, 0.5, 0.0)
+            weapon_offset = Vec3(0.25, 0.4, 0.0)
             # weapon_offset = self.weapon.offset
 
             weapon_offset_rotated = Vec3(
@@ -39,4 +39,7 @@ class Character(Entity):
                 0.0
             )
             self.weapon_position = self.position + weapon_offset_rotated
+
+            self.weapon.position = self.weapon_position
+            self.weapon.rotation = self.rotation
 

@@ -6,12 +6,12 @@ from src.util.console import console
 configs_getter = base_pack.unit_getter('stat.wpn')
 
 
-def create_weapon(weapon_id):
+def create_weapon(weapon_id, tr):
     config = configs_getter(weapon_id)
     weapon_type = config.get('type')
     if weapon_type == 'melee':
-        return MeleeWeapon(config)
+        return MeleeWeapon(config, tr)
     elif weapon_type == 'ranged':
-        return RangedWeapon(config)
+        return RangedWeapon(config, tr)
     else:
         console.log_warn('unknown weapon type' + weapon_type)

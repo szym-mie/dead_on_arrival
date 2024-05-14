@@ -1,18 +1,22 @@
 from abc import abstractmethod
 
-from pyglet.media import PlayerGroup, Player
+from pyglet.media import Player
 
 from src.entity.item import Item
+from src.entity.projectile import Projectile
+from src.entity.world import world
 from src.resource.default_resource_packs import base_pack
 
 
 class Weapon(Item):
     # TODO use dict.get to retrieve values without KeyErrors
 
-    def __init__(self, weapon_config):
+    def __init__(self, weapon_config, tracer_rect_proto):
         super().__init__(weapon_config['name'])
         self.weapon_type = weapon_config['type']
         self.weapon_class = weapon_config['class']
+
+        self.tracer_rect_proto = tracer_rect_proto
 
         self.is_used = False
 
@@ -57,6 +61,11 @@ class Weapon(Item):
             print(self.ammo_count)
             self.player.seek(0)
             self.player.play()
+
+            proj = Projectile(base_pack.get('stat.ammo.223rem'), self.tracer_rect_proto)
+
+            world.spawn(proj, self.position.x, self.position.y)
+            proj.shoot(self.rotation)
 
     @abstractmethod
     def can_be_used(self):
