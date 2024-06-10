@@ -32,6 +32,36 @@ class LevelMeshPrototype(MeshPrototype):
             pox = nox + 1
             poy = noy + 1
             for x, y, tile in level_chunk.tiles.with_position():
+                tx = x + nox
+                ty = y + noy
+                prev_tile_y = level.get_tile_at(tx, ty - 1)
+                next_tile_y = level.get_tile_at(tx, ty + 1)
+                prev_tile_x = level.get_tile_at(tx - 1, ty)
+                next_tile_x = level.get_tile_at(tx + 1, ty)
+                corner_tile_pp = level.get_tile_at(tx - 1, ty - 1)
+                corner_tile_np = level.get_tile_at(tx + 1, ty - 1)
+                corner_tile_pn = level.get_tile_at(tx - 1, ty + 1)
+                corner_tile_nn = level.get_tile_at(tx + 1, ty + 1)
+
+                ptz_y = prev_tile_y.z if prev_tile_y is not None else 0
+                ntz_y = next_tile_y.z if next_tile_y is not None else 0
+                ptz_x = prev_tile_x.z if prev_tile_x is not None else 0
+                ntz_x = next_tile_x.z if next_tile_x is not None else 0
+                pptz = corner_tile_pp.z if corner_tile_pp is not None else 0
+                nptz = corner_tile_np.z if corner_tile_np is not None else 0
+                pntz = corner_tile_pn.z if corner_tile_pn is not None else 0
+                nntz = corner_tile_nn.z if corner_tile_nn is not None else 0
+
+                pnm_y = 0.8 if ptz_y > 0 else 1.0
+                nnm_y = 0.8 if ntz_y > 0 else 1.0
+                pnm_x = 0.8 if ptz_x > 0 else 1.0
+                nnm_x = 0.8 if ntz_x > 0 else 1.0
+
+                ppnm = 0.8 if pptz > 0 else 1.0
+                npnm = 0.8 if nptz > 0 else 1.0
+                pnnm = 0.8 if pntz > 0 else 1.0
+                nnnm = 0.8 if nntz > 0 else 1.0
+
                 z, wall_id = tile.z, tile.wall_id
                 position_array.extend([
                     x + pox, y + poy, z, wall_id,
@@ -50,12 +80,12 @@ class LevelMeshPrototype(MeshPrototype):
                     1.0, 1.0
                 ])
                 normal_array.extend([
-                    0, 0, 1,
-                    0, 0, 1,
-                    0, 0, 1,
-                    0, 0, 1,
-                    0, 0, 1,
-                    0, 0, 1,
+                    0, 0, nnm_y * nnm_x * nnnm,
+                    0, 0, pnm_y * nnm_x * npnm,
+                    0, 0, pnm_y * pnm_x * ppnm,
+                    0, 0, pnm_y * pnm_x * ppnm,
+                    0, 0, nnm_y * pnm_x * pnnm,
+                    0, 0, nnm_y * nnm_x * nnnm,
                 ])
 
         return position_array, texcoord_array, normal_array
