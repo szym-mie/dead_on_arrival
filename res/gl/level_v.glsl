@@ -4,8 +4,9 @@ in vec4 vertex_position;
 in vec2 vertex_texcoord;
 in vec3 vertex_normal;
 
-out vec3 texcoord;
-out vec3 normal;
+out vec3 frag_position;
+out vec3 frag_texcoord;
+out vec3 frag_normal;
 
 uniform vec3 position;
 
@@ -16,8 +17,9 @@ void
 main()
 {
     float atlas_layer = vertex_position.w;
-    texcoord = vec3(vertex_texcoord.xy, atlas_layer);
-    normal = vertex_normal;
+    frag_position = vertex_position.xyz;
+    frag_texcoord = vec3(vertex_texcoord.xy, atlas_layer);
+    frag_normal = vertex_normal;
 
     vec4 full_vertex = vec4(
         vertex_position.x + position.x,
