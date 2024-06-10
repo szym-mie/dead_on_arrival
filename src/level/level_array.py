@@ -23,3 +23,12 @@ class LevelArray(Generic[U]):
         for x in range(self.x_size):
             for y in range(self.y_size):
                 yield x, y, self.array[x][y]
+
+    def map(self, func):
+        new_array = LevelArray(self.x_size, self.y_size, lambda: None)
+
+        for x in range(self.x_size):
+            for y in range(self.y_size):
+                new_array.put_at(x, y, func(self, x, y))
+
+        return new_array

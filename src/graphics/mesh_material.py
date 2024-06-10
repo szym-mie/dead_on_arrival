@@ -25,7 +25,10 @@ class MeshMaterial:
         self.u_diffuse_texture = self.get_uniform_location('diffuse_texture')
         self.u_normal_texture = self.get_uniform_location('normal_texture')
         self.u_emission_texture = self.get_uniform_location('emission_texture')
-        self.a_vertex = self.get_attrib_location('vertex')
+
+        self.a_vertex_position = self.get_attrib_location('vertex_position')
+        self.a_vertex_texcoord = self.get_attrib_location('vertex_texcoord')
+        self.a_vertex_normal = self.get_attrib_location('vertex_normal')
 
     def use_program(self):
         glUseProgram(self.program_handler)

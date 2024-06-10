@@ -4,9 +4,9 @@ from src.level.level_import import LevelImport
 
 
 class Level:
-    def __init__(self, wall_image, floor_image, level_import: LevelImport):
+    def __init__(self, level_import: LevelImport):
         self.chunk_size = 8
-        self.chunks = level_import.chunkify(wall_image, floor_image, self.chunk_size)
+        self.chunks = level_import.chunkify(self.chunk_size)
 
     def draw(self, x, y):
         for cx, cy, chunk in self.chunks.with_position():
@@ -27,4 +27,4 @@ class Level:
 
     @classmethod
     def empty(cls):
-        return cls(None, None, LevelImport.empty())
+        return cls(LevelImport.empty())

@@ -24,6 +24,14 @@
         "max_layers": 16
       }
     },
+    "imga": {
+      "#search": {
+        "path": "imga/",
+        "loader": "image_array",
+        "load_later": true,
+        "max_layers": 16
+      }
+    },
     "snd": {
       "#search": {
         "path": "snd/",

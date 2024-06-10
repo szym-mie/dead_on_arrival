@@ -7,13 +7,19 @@ from src.graphics.texture_2d import Texture2D
 
 
 class RectPrototype(MeshPrototype):
-    vertices = [1, 1, -1, 1, 1, -1, -1, -1]
+    position_vertices = [1,  1, -1,  1,  1, -1, -1, -1]
+    texcoord_vertices = [1,  1,  0,  1,  1,  0,  0,  0]
+    normal_vertices = [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1]
 
     def __init__(self, diffuse_image):
-        vertex_buffer = FloatArrayBuffer(RectPrototype.vertices, 2)
+        vertex_position_buffer = FloatArrayBuffer(RectPrototype.position_vertices, 2)
+        vertex_texcoord_buffer = FloatArrayBuffer(RectPrototype.texcoord_vertices, 2)
+        vertex_normal_buffer = FloatArrayBuffer(RectPrototype.normal_vertices, 3)
         material = RectMaterial()
         material.diffuse_texture = Texture2D(diffuse_image)
 
         super().__init__(GL_TRIANGLE_STRIP,
-                         vertex_buffer,
+                         vertex_position_buffer,
+                         vertex_texcoord_buffer,
+                         vertex_normal_buffer,
                          material)

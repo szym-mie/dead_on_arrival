@@ -3,8 +3,8 @@ import weakref
 
 image_data_cache = weakref.WeakKeyDictionary()
 
-class SpriteCollision:
 
+class SpriteCollision:
     def __init__(self, sprite):
         self.sprite = sprite
 
@@ -20,7 +20,9 @@ class SpriteCollision:
     def get_rect(self):
         return Rectangle.from_sprite(self.sprite)
 
+
 def collide(sprite1, sprite2):
+    r1, r2 = sprite1.get_rect(), sprite2.get_rect()
 
     collision_sprite1 = SpriteCollision(sprite1)
     collision_sprite2 = SpriteCollision(sprite2)

@@ -31,7 +31,8 @@ class Camera:
 
     def update(self):
         if self.tracked_entity is not None:
-            self.position = self.tracked_entity.position
+            self.position.x = self.tracked_entity.position.x
+            self.position.y = self.tracked_entity.position.y
 
         scale_vector = Vec3(self.scale, self.scale, self.scale)
         self._view = Mat4().translate(-self.position * self.scale).scale(scale_vector)

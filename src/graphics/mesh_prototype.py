@@ -6,10 +6,14 @@ from src.graphics.mesh import Mesh
 class MeshPrototype:
     def __init__(self,
                  draw_mode,
-                 vertex_buffer,
+                 vertex_position_buffer,
+                 vertex_texcoord_buffer,
+                 vertex_normal_buffer,
                  material):
         self.draw_mode = draw_mode
-        self.vertex_buffer = vertex_buffer
+        self.vertex_position_buffer = vertex_position_buffer
+        self.vertex_texcoord_buffer = vertex_texcoord_buffer
+        self.vertex_normal_buffer = vertex_normal_buffer
         self.material = material
 
         self.meshes = []
@@ -20,15 +24,16 @@ class MeshPrototype:
         return mesh
 
     def pre_bind(self, camera):
-        glUseProgram(self.material.program_handler)
         self.material.pre_bind(camera)
-        self.vertex_buffer.bind(self.material.a_vertex)
+        self.vertex_position_buffer.bind(self.material.a_vertex_position)
+        self.vertex_texcoord_buffer.bind(self.material.a_vertex_texcoord)
+        self.vertex_normal_buffer.bind(self.material.a_vertex_normal)
 
     def draw(self, camera):
         self.pre_bind(camera)
         for mesh in self.meshes:
             mesh.bind()
-            glDrawArrays(self.draw_mode, 0, self.vertex_buffer.vertex_count)
+            glDrawArrays(self.draw_mode, 0, self.vertex_position_buffer.vertex_count)
 
     @staticmethod
     def _create_buffer():

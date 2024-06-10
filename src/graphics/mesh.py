@@ -23,4 +23,4 @@ class Mesh:
     def draw(self, camera):
         self.mesh_prototype.pre_bind(camera)
         self.bind()
-        glDrawArrays(self.mesh_prototype.draw_mode, 0, self.mesh_prototype.vertex_buffer.vertex_count)
+        glDrawArrays(self.mesh_prototype.draw_mode, 0, self.mesh_prototype.vertex_position_buffer.vertex_count)

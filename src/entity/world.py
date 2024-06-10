@@ -23,11 +23,16 @@ class World(Unit):
             entity.update(delta_time)
             x = entity.position.x
             y = entity.position.y
-            if (self.level.get_tile_at(x, y) == 0 or
-                    self.level.get_tile_at(*World.lerp(x, y, last_x, last_y, .5)) == 0 or
-                    self.level.get_tile_at(*World.lerp(x, y, last_x, last_y, .25)) == 0 or
-                    self.level.get_tile_at(*World.lerp(x, y, last_x, last_y, .75)) == 0):
+
+            if (World.can_collide_projectile(self.level.get_tile_at(x, y)) or
+                    World.can_collide_projectile(self.level.get_tile_at(*World.lerp(x, y, last_x, last_y, .5))) or
+                    World.can_collide_projectile(self.level.get_tile_at(*World.lerp(x, y, last_x, last_y, .25))) or
+                    World.can_collide_projectile(self.level.get_tile_at(*World.lerp(x, y, last_x, last_y, .75)))):
                 self.remove(entity)
+
+    @staticmethod
+    def can_collide_projectile(tile):
+        return tile.is_solid and not tile.is_slab
 
     @staticmethod
     def lerp(x1, y1, x2, y2, q):

@@ -8,7 +8,7 @@ class AnimationPrototype:
         self.frames = [AnimationFrame(frame_config) for frame_config in config]
         self.texture_array = None
 
-    def get_texture_ids(self):
+    def get_texture_res_ids(self):
         return [frame.texture for frame in self.frames]
 
     def update_texture(self, textures):
