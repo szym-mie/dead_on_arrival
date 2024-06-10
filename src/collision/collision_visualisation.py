@@ -1,5 +1,3 @@
-
-
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 from src.collision.sprite_collision import SpriteCollision, collide

@@ -111,3 +111,30 @@ def update(delta_time):
 
 clock.schedule_interval(update, 1 / 60)
 app.run(1 / 60)
+
+
+
+from src.algorithms.pathfinding import PathFinder
+path_finder = PathFinder(level)
+
+print(f'{path_finder.can_hear((5, 5), (5, 11), 6)}')
+
+tab = [[[] for _ in range(25)] for _ in range(25)]
+for x in range(25):
+    for y in range(25):
+        if level.get_tile_at(x, y) == 0:
+            tab[x][y].append('W')
+start = (5, 10)
+end = (11, 22)
+path = path_finder.get_shortest_path(start, end)
+path1 = path_finder.flank(start, end)
+print(f'{path=}')
+print(f'{path1=}')
+
+for x, y in path:
+    tab[x][y].append(1)
+
+for x,y in path1:
+    tab[x][y].append(2)
+
+print(*tab, sep='\n')
