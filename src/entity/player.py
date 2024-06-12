@@ -15,7 +15,9 @@ class Player(Character):
         self.score = 0
         self.kills = 0
         self.kills_ratio = self.calculate_kills_ratio()
-        self.pickup_zone = BCircle(self.position, 1)
+        self.pickup_zone = BCircle(self.position, 1.5)
+        self.want_to_grab = False
+        self.grabbed_item = False
 
     def increase_hp(self, val: int):
         self.health = max(0, self.health - val)
@@ -42,17 +44,6 @@ class Player(Character):
 
     def calculate_kills_ratio(self):
         return self.kills / self.used_ammo if self.used_ammo > 0 else 0
-
-    def attack(self):
-        pass
-        # if self.current_weapon.usage_cooldown == 0 and self.current_weapon.ammo > 0:
-        #     print(f'shooting')
-        #     self.current_weapon.usage_cooldown = 10
-        #     spawn_bullet_pos = Vec2(1, -0.3).rotate(-self.rotation / 360 * 2 * pi)
-        #     # spawn_bullet_pos =
-        #     print(f'{spawn_bullet_pos=}')
-        #     projectile = Projectile(self.bullet_initial_frame, spawn_bullet_pos.x * 64, spawn_bullet_pos.y * 64, -self.rotation, self.level)
-        #     self.bullet_group.append(projectile)
 
     def react_to_control(self):
         self.is_walking = False
@@ -86,6 +77,13 @@ class Player(Character):
                 self.weapon.stop_use()
                 self.is_shooting = False
 
+        grab_item_pressed = controls.get_bind('grab_item')
+        if grab_item_pressed:
+            self.want_to_grab = True
+        else:
+            self.want_to_grab = False
+            self.grabbed_item = False
+
         x_change_mouse_player = controls.mouse_x - 640
         y_change_mouse_player = controls.mouse_y - 360
         self.rotation = atan2(y_change_mouse_player, x_change_mouse_player) - pi / 2
@@ -95,3 +93,4 @@ class Player(Character):
         self.update_motion(delta_time)
         self.react_to_control()
         self.update_weapon_offset()
+        self.pickup_zone.center = self.position

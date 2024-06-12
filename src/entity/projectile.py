@@ -11,8 +11,10 @@ class Projectile(Entity):
         self.get_velocity_loss = self.get_projectile_drag
 
         self.initial_velocity = config.get('velocity') / 10
+        self.pellets = config.get('pellets', 1)
         self.remove_time = config.get('remove_time', 10)
         self.base_spread = config.get('base_spread', 0)
+        self.base_damage = config.get('hit', {}).get('base_damage')
 
         self.rect = tracer_rect_proto.create_mesh(self.position, 0, Vec3(0.75, 0.75, 0.75))
 

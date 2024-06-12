@@ -1,0 +1,23 @@
+{
+  "name": "VLS",
+  "type": "ranged",
+  "class": "marksman rifle",
+  "ammo_count": 5,
+  "ammo_type": "stat.ammo.50bmg",
+
+  "fire_mode": "semi",
+  "fire_count": 1,
+  "fire_rate": 60,
+
+  "fx": {
+    "shot": "fx.shot.rifle_low",
+    "case": "fx.case.rifle_low"
+  },
+
+  "anim": "anim.wpn.vls",
+
+  "sounds": {
+    "shot": "snd.wpn.vls-shot",
+    "shot_last": "snd.wpn.vls-shot-last"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "WN-690",
+  "type": "ranged",
+  "class": "shotgun",
+  "ammo_count": 5,
+  "ammo_type": "stat.ammo.12x76saw",
+
+  "fire_mode": "semi",
+  "fire_count": 1,
+  "fire_rate": 40,
+
+  "fx": {
+    "shot": "fx.shot.shotgun",
+    "case": "fx.case.shotgun"
+  },
+
+  "anim": "anim.wpn.wn690",
+
+  "sounds": {
+    "shot": "snd.wpn.wn690-shot",
+    "shot_last": "snd.wpn.wn690-shot-last"
+  }
+}

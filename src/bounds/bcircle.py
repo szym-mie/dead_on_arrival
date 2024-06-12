@@ -17,7 +17,7 @@ class BCircle(BTester):
 
     def test_point(self, vec):
         # TODO return vector or none
-        return self.center.dist_to(vec) <= self.radius
+        return self.center.distance(vec) <= self.radius
 
     def test_bray(self, other):
         # TODO return vector or none

@@ -23,6 +23,9 @@ class MeshPrototype:
         self.meshes.append(mesh)
         return mesh
 
+    def remove_mesh(self, mesh):
+        self.meshes.remove(mesh)
+
     def pre_bind(self, camera):
         self.material.pre_bind(camera)
         self.vertex_position_buffer.bind(self.material.a_vertex_position)

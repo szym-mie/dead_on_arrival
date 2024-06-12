@@ -2,9 +2,11 @@
   "velocity": 430,
   "pellets": 1,
   "base_spread": 0,
-  "base_damage": {
-    "0": 4,
-    "1": 2
+  "hit": {
+    "base_damage": {
+      "0": 4,
+      "1": 2
+    }
   },
   "proj_anim": "TODO"
 }

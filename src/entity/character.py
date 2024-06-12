@@ -28,6 +28,15 @@ class Character(Entity):
 
         self.is_dead = False
 
+    def deal_damage(self, damage):
+        if self.armor > 0:
+            self.armor -= damage.get('1', 0)
+            self.armor = max(self.armor, 0)
+        else:
+            self.health -= damage.get('0', 0)
+            if self.health <= 0:
+                self.is_dead = True
+
     def update_weapon_offset(self):
         if self.weapon is not None:
             weapon_offset = Vec3(0.25, 0.4, 0.0)

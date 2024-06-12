@@ -36,36 +36,49 @@ class Weapon(Item):
         self.anim = weapon_config['anim']
         self.sounds = weapon_config['sounds']
 
+        self.click_sound = base_pack.get('snd.wpn.click')
         self.shot_sound = base_pack.get(self.sounds['shot'])
         self.shot_last_sound = base_pack.get(self.sounds['shot_last'])
 
-        self.player = Player()
+        self.sound_player = Player()
 
     def start_use(self):
-        self.is_used = True
-        self.rounds_to_fire = self.fire_count
-        self.fire_time = 0.0
+        if self.can_be_used() and self.rounds_to_fire == 0:
+            self.is_used = True
+            self.rounds_to_fire = self.fire_count
+            self.fire_time = 0.0
+        elif self.rounds_to_fire == 0:
+            self.sound_player.next_source()
+            self.sound_player.queue(self.click_sound)
+            self.sound_player.seek(0)
+            self.sound_player.play()
 
     def stop_use(self):
         self.is_used = False
 
     def fire(self):
         if self.rounds_to_fire > 0 and self.can_be_used():
-            self.player.next_source()
+            self.sound_player.next_source()
             if (self.rounds_to_fire > 1 or self.fire_count == 1) and self.ammo_count > 1:
-                self.player.queue(self.shot_sound)
+                self.sound_player.queue(self.shot_sound)
             else:
-                self.player.queue(self.shot_last_sound)
+                self.sound_player.queue(self.shot_last_sound)
             self.rounds_to_fire -= 1
             self.ammo_count -= 1
             print(self.ammo_count)
-            self.player.seek(0)
-            self.player.play()
+            self.sound_player.seek(0)
+            self.sound_player.play()
 
-            proj = Projectile(base_pack.get('stat.ammo.223rem'), self.tracer_rect_proto)
+            proj = Projectile(base_pack.get(self.ammo_type), self.tracer_rect_proto)
 
-            world.spawn(proj, self.position.x, self.position.y)
+            world.spawn(proj, self.position.x, self.position.y, 0.0)
             proj.shoot(self.rotation)
+
+            if self.fire_mode == 'auto' and self.is_used:
+                self.rounds_to_fire = self.fire_count
+
+            return True
+        return False
 
     @abstractmethod
     def can_be_used(self):
@@ -78,8 +91,15 @@ class Weapon(Item):
     def update(self, delta_time):
         self.time += delta_time
         self.update_motion(delta_time)
-        new_fire_time = self.fire_time + delta_time
-        while new_fire_time > self.fire_delay:
-            self.fire()
-            new_fire_time -= self.fire_delay
-        self.fire_time = new_fire_time
+        if self.rounds_to_fire > 0:
+            self.fire_time += delta_time
+            while self.fire_time > 0:
+                self.fire()
+                self.fire_time -= self.fire_delay
+
+        # new_fire_time = self.fire_time + delta_time
+        # while new_fire_time > self.fire_delay:
+        #     self.fire()
+        #     new_fire_time -= self.fire_delay
+        # self.fire_time = new_fire_time
+        # print(self, self.fire_time)

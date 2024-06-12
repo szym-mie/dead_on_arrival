@@ -1,0 +1,23 @@
+{
+  "name": "PP9",
+  "type": "ranged",
+  "class": "machine pistol",
+  "ammo_count": 52,
+  "ammo_type": "stat.ammo.9x19mm",
+
+  "fire_mode": "auto",
+  "fire_count": 1,
+  "fire_rate": 900,
+
+  "fx": {
+    "shot": "fx.shot.pistol",
+    "case": "fx.case.pistol"
+  },
+
+  "anim": "anim.wpn.pp9",
+
+  "sounds": {
+    "shot": "snd.wpn.pp9-shot",
+    "shot_last": "snd.wpn.pp9-shot-last"
+  }
+}

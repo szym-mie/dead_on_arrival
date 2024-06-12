@@ -24,3 +24,6 @@ class Mesh:
         self.mesh_prototype.pre_bind(camera)
         self.bind()
         glDrawArrays(self.mesh_prototype.draw_mode, 0, self.mesh_prototype.vertex_position_buffer.vertex_count)
+
+    def remove(self):
+        self.mesh_prototype.remove_mesh(self)
