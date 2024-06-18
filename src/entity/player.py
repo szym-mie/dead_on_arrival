@@ -87,6 +87,12 @@ class Player(Character):
         y_change_mouse_player = controls.mouse_y - 360
         self.rotation = atan2(y_change_mouse_player, x_change_mouse_player) - pi / 2
 
+    def swap_weapons(self, new_weapon):
+        if self.weapon is not None:
+            self.weapon.on_drop(self)
+        self.weapon = new_weapon
+        new_weapon.on_grab(self)
+
 
 
     def update(self, delta_time):

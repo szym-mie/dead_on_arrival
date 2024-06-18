@@ -4,7 +4,7 @@
   "hp": 6,
   "ap": 0,
 
-  "move_speed": 8,
+  "move_speed": 5,
 
   "anim": {
     "upper": "tex.char.recruit_upper",

@@ -8,17 +8,12 @@
   },
   "frames": [
     {
-      "tex": "tex.wpn.mk5-item",
+      "tex": "tex.char.player_torso_p",
       "next": null
     },
     {
-      "tex": "tex.wpn.mk5-hold0",
+      "tex": "tex.char.player_torso_l",
       "next": null
-    },
-    {
-      "tex": "tex.wpn.mk5-hold1",
-      "next": 1,
-      "delay": 0.05
     }
   ]
 }

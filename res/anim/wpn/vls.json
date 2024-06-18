@@ -8,15 +8,15 @@
   },
   "frames": [
     {
-      "tex": "tex.wpn.mk5-item",
+      "tex": "tex.wpn.vls-item",
       "next": null
     },
     {
-      "tex": "tex.wpn.mk5-hold0",
+      "tex": "tex.wpn.vls-hold0",
       "next": null
     },
     {
-      "tex": "tex.wpn.mk5-hold1",
+      "tex": "tex.wpn.vls-hold1",
       "next": 1,
       "delay": 0.05
     }

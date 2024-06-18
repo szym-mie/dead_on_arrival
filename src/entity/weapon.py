@@ -47,7 +47,7 @@ class Weapon(Item):
             self.is_used = True
             self.rounds_to_fire = self.fire_count
             self.fire_time = 0.0
-        elif self.rounds_to_fire == 0:
+        else:
             self.sound_player.next_source()
             self.sound_player.queue(self.click_sound)
             self.sound_player.seek(0)
@@ -71,7 +71,7 @@ class Weapon(Item):
 
             proj = Projectile(base_pack.get(self.ammo_type), self.tracer_rect_proto)
 
-            world.spawn(proj, self.position.x, self.position.y, 0.0)
+            world.spawn_projectile(proj, self.position.x, self.position.y, 0.0)
             proj.shoot(self.rotation)
 
             if self.fire_mode == 'auto' and self.is_used:
@@ -96,10 +96,3 @@ class Weapon(Item):
             while self.fire_time > 0:
                 self.fire()
                 self.fire_time -= self.fire_delay
-
-        # new_fire_time = self.fire_time + delta_time
-        # while new_fire_time > self.fire_delay:
-        #     self.fire()
-        #     new_fire_time -= self.fire_delay
-        # self.fire_time = new_fire_time
-        # print(self, self.fire_time)

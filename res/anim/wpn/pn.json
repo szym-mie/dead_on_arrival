@@ -1,15 +1,24 @@
-[
-  {
-    "tex": "tex.wpn.pn-item",
-    "next": null
+{
+  "mesh": {
+    "scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
   },
-  {
-    "tex": "tex.wpn.pn-hold0",
-    "next": null
-  },
-  {
-    "tex": "tex.wpn.pn-hold1",
-    "next": 1,
-    "delay": 0.15
-  }
-]
+  "frames": [
+    {
+      "tex": "tex.wpn.pn-item",
+      "next": null
+    },
+    {
+      "tex": "tex.wpn.pn-hold0",
+      "next": null
+    },
+    {
+      "tex": "tex.wpn.pn-hold1",
+      "next": 1,
+      "delay": 0.15
+    }
+  ]
+}

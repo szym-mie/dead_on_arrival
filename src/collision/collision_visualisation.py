@@ -9,7 +9,7 @@ window = pyglet.window.Window(SCREEN_WIDTH, SCREEN_HEIGHT, caption="Masks")
 BG = (0, 0, 0)
 WHITE = (255, 255, 255)
 
-# TODO check on main player sprite
+# TODO check on main char sprite
 class Soldier(pyglet.sprite.Sprite):
     def __init__(self, x, y, batch=None):
         super().__init__(img=pyglet.image.load('default_player_image.png'), batch=batch)

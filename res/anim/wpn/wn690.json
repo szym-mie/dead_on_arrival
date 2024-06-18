@@ -1,0 +1,29 @@
+{
+  "mesh": {
+    "scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
+  },
+  "frames": [
+    {
+      "tex": "tex.wpn.wn690-item",
+      "next": null
+    },
+    {
+      "tex": "tex.wpn.wn690-hold0",
+      "next": null
+    },
+    {
+      "tex": "tex.wpn.wn690-hold0",
+      "next": 3,
+      "delay": 0.4
+    },
+    {
+      "tex": "tex.wpn.wn690-hold1",
+      "next": 1,
+      "delay": 0.2
+    }
+  ]
+}

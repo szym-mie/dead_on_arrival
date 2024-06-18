@@ -17,8 +17,10 @@ class MeshPrototype:
         self.material = material
 
         self.meshes = []
+        self.is_unused = True
 
     def create_mesh(self, position, rotation, scale):
+        self.is_unused = False
         mesh = Mesh(position, rotation, scale, self)
         self.meshes.append(mesh)
         return mesh
@@ -34,10 +36,11 @@ class MeshPrototype:
         self.vertex_normal_buffer.bind(self.material.a_vertex_normal)
 
     def draw(self, camera):
-        self.pre_bind(camera)
-        for mesh in self.meshes:
-            mesh.bind()
-            glDrawArrays(self.draw_mode, 0, self.vertex_position_buffer.vertex_count)
+        if not self.is_unused:
+            self.pre_bind(camera)
+            for mesh in self.meshes:
+                mesh.bind()
+                glDrawArrays(self.draw_mode, 0, self.vertex_position_buffer.vertex_count)
 
     @staticmethod
     def _create_buffer():

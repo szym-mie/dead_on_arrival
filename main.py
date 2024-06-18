@@ -230,8 +230,7 @@ def update(delta_time):
     pr.disable()
 
 
-sprite_image = base_pack.get('tex.hud.hp-point1')
-print(f'{sprite_image=}')
+sprite_image = base_pack.get('tex.hud.doa')
 sprite = Sprite(sprite_image)
 sprite.draw()
 

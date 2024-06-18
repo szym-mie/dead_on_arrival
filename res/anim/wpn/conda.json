@@ -1,10 +1,19 @@
-[
-  {
-    "tex": "tex.wpn.conda-item",
-    "next": null
+{
+  "mesh": {
+    "scale": [
+      0.75,
+      0.75,
+      0.75
+    ]
   },
-  {
-    "tex": "tex.wpn.conda-hold0",
-    "next": null
-  }
-]
+  "frames": [
+    {
+      "tex": "tex.wpn.conda-item",
+      "next": null
+    },
+    {
+      "tex": "tex.wpn.conda-hold0",
+      "next": null
+    }
+  ]
+}

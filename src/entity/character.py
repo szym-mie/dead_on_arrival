@@ -192,7 +192,9 @@ class Character(Entity):
         self.move(player_position, delta_time)
 
         if self.can_see_player(player_position):
-            # self.rotation =
+            dx = self.position.x - player_position.x
+            dy = self.position.y - player_position.y
+            self.rotation = atan2(dy, dx) + pi / 2
             if self.state_time > 1.5:
                 self.start_shooting()
         if self.state == 'shoot' and self.state_time > 0.5:

@@ -1,3 +1,5 @@
+from math import pi
+
 from pyglet.math import Vec2
 
 from src.util.console import console
@@ -8,28 +10,31 @@ class World(Unit):
     def __init__(self):
         self.level = None
 
-        # FIXME: lol
-        self.entities = []
+        self.player = None
 
-    def spawn(self, entity, x, y, rotation):
+        self.items = []
+        self.characters = []
+        self.projectiles = []
+
+    def spawn_projectile(self, entity, x, y, rotation):
         entity.position.x = x
         entity.position.y = y
         entity.rotation = rotation
-        self.entities.append(entity)
+        self.projectiles.append(entity)
 
-    def remove(self, entity):
+    def remove_projectile(self, entity):
         try:
-            self.entities.remove(entity)
-        except ValueError:
-            console.log_warn('Entity not in entities list')
+            self.projectiles.remove(entity)
+        except IndexError:
+            pass
 
     def update(self, delta_time, characters):
-        for entity in self.entities:
-            last_x = entity.position.x
-            last_y = entity.position.y
-            entity.update(delta_time)
-            x = entity.position.x
-            y = entity.position.y
+        for projectiles in self.projectiles:
+            last_x = projectiles.position.x
+            last_y = projectiles.position.y
+            projectiles.update(delta_time)
+            x = projectiles.position.x
+            y = projectiles.position.y
 
             pos0 = Vec2(x, y)
             pos1 = Vec2(*World.lerp(x, y, last_x, last_y, .25))
@@ -41,10 +46,10 @@ class World(Unit):
                     rect, char, bcircle = characters[i]
                     if (bcircle.test_point(pos0) or bcircle.test_point(pos1) or
                             bcircle.test_point(pos2) or bcircle.test_point(pos3)):
-                        print(entity.base_damage)
-                        char.deal_damage(entity.base_damage)
-                        entity.rect.remove()
-                        self.remove(entity)
+                        print(projectiles.base_damage)
+                        char.deal_damage(projectiles.base_damage)
+                        projectiles.rect.remove()
+                        self.remove_projectile(projectiles)
                         if char.is_dead:
                             rect.remove()
                             del characters[i]
@@ -58,15 +63,15 @@ class World(Unit):
             tile3 = self.level.get_tile_at(*pos3)
 
             if tile0 is None or tile1 is None or tile2 is None or tile3 is None:
-                entity.rect.remove()
-                self.remove(entity)
+                projectiles.rect.remove()
+                self.remove_projectile(projectiles)
                 continue
             if (World.can_collide_projectile(tile0) or
                     World.can_collide_projectile(tile1) or
                     World.can_collide_projectile(tile2) or
                     World.can_collide_projectile(tile3)):
-                entity.rect.remove()
-                self.remove(entity)
+                projectiles.rect.remove()
+                self.remove_projectile(projectiles)
 
     @staticmethod
     def can_collide_projectile(tile):
