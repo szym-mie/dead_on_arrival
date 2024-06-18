@@ -1,3 +1,4 @@
+from cProfile import Profile
 from math import floor, ceil, pi
 
 from pyglet import clock, app
@@ -32,7 +33,8 @@ pp9_item_image = base_pack.get('tex.wpn.pp9-hold0')
 conda_item_image = base_pack.get('tex.wpn.conda-hold0')
 mk5_item_image = base_pack.get('tex.wpn.mk5-hold0')
 vls_item_image = base_pack.get('tex.wpn.vls-hold0')
-player_image = base_pack.get('tex.player.default_player_image')
+player_image = base_pack.get('tex.char.player_torso_l')
+recruit_image = base_pack.get('tex.char.recruit_torso_l')
 
 controls.define_binds(conf_pack.get('binds'))
 controls.attach_to_window(window)
@@ -63,11 +65,14 @@ player_rect = player_rect_proto \
     .create_mesh(Vec3(0, 0, 0), 0, Vec3(0.75, 0.75, 0.75))
 player = create_character('player')
 
+recruit_rect_proto = RectPrototype(recruit_image)
+
 player.position.x = 3.5
 player.position.y = 28.5
 
 entities = []
 items = []
+wpts = []
 
 for x, y, tile in level.all_tiles():
     ts = tile.spawn_id
@@ -83,7 +88,7 @@ for x, y, tile in level.all_tiles():
         character.position.y = y + .5
         character.rotation = (ts % 60) * pi / 2
         entities.append((
-            player_rect_proto.create_mesh(Vec3(), 0, Vec3(0.75, 0.75, 0.75)),
+            recruit_rect_proto.create_mesh(Vec3(), 0, Vec3(0.75, 0.75, 0.75)),
             character,
             BCircle(Vec2(), 0.5)
         ))
@@ -128,13 +133,13 @@ for x, y, tile in level.all_tiles():
             vls_item_rect_proto.create_mesh(Vec3(), 0, Vec3(0.75, 0.75, 0.75)),
             item
         ))
+    if ts == 8:
+        wpts.append((x + .5, y + .5))
 
 print(entities)
 print(items)
+print(wpts)
 
-
-for _, entity,_ in entities:
-    entity.level_map = level
 
 projection = Mat4.perspective_projection(1280/720, 1.0, 2048.0, fov=40)
 # projection = Mat4.orthogonal_projection(-640, 640, -360, 360, -255, 255)
@@ -167,6 +172,7 @@ def on_draw():
 
     level_mesh_proto.draw(camera)
     player_rect_proto.draw(camera)
+    recruit_rect_proto.draw(camera)
     pp9_item_rect_proto.draw(camera)
     conda_item_rect_proto.draw(camera)
     mk5_item_rect_proto.draw(camera)
@@ -174,7 +180,12 @@ def on_draw():
     tracer_rect_proto.draw(camera)
 
 
+pr = Profile()
+
+
 def update(delta_time):
+    pr.enable()
+
     player.update(delta_time)
 
     if level.get_tile_at(player.position.x, player.position.y - 0.8).is_solid:  # up
@@ -193,7 +204,7 @@ def update(delta_time):
 
 
     for rect, entity, bcircle in entities:
-        entity.update_((ceil(player.position.x), ceil(player.position.y)), delta_time)
+        entity.update_(player.position, delta_time)
 
         rect.position = entity.position
         rect.rotation = entity.rotation
@@ -216,6 +227,8 @@ def update(delta_time):
                 sound_player.play()
     world.update(delta_time, entities)
 
+    pr.disable()
+
 
 sprite_image = base_pack.get('tex.hud.hp-point1')
 print(f'{sprite_image=}')
@@ -227,3 +240,4 @@ app.run(1 / 60)
 
 world.level.test_collisions(Vec3(5.5, 7.2), Vec3(10.3, 9.3))
 
+pr.print_stats()

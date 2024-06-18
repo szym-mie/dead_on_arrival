@@ -24,7 +24,8 @@ class MeshPrototype:
         return mesh
 
     def remove_mesh(self, mesh):
-        self.meshes.remove(mesh)
+        if mesh in self.meshes:
+            self.meshes.remove(mesh)
 
     def pre_bind(self, camera):
         self.material.pre_bind(camera)

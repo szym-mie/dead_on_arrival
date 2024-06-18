@@ -3,6 +3,7 @@ from src.algorithms.pathfinding import PathFinder
 from pyglet.math import Vec3
 
 from src.entity.entity import Entity
+from src.entity.world import world
 
 
 class Character(Entity):
@@ -26,16 +27,17 @@ class Character(Entity):
 
         self.frames = config['anim']
 
+        self.state = 'idle'
+        self.state_time = 0.0
+        self.path_finder = PathFinder(world.level)
+
         self.is_dead = False
 
-        self.level_map = None
+        self.level = world.level
         self.path = []
         self.path_index = 0
 
         self.is_shooting = False
-
-
-
 
     def deal_damage(self, damage):
         if self.armor > 0:
@@ -64,11 +66,10 @@ class Character(Entity):
     def move(self, player_position, delta_time):
         if self.is_shooting:
             return
-        path_finder = PathFinder(self.level_map)
         if not self.path or self.path_index >= len(self.path):
-            self.path = path_finder.get_shortest_path((int(self.position.x), int(self.position.y)), player_position)
+            self.path = self.path_finder.get_shortest_path((int(self.position.x), int(self.position.y)),
+                                                           player_position)
             self.path_index = 0
-
         if self.path:
             target_pos = Vec3(self.path[self.path_index][0], self.path[self.path_index][1], 0)
             direction = target_pos - self.position
@@ -77,18 +78,12 @@ class Character(Entity):
             self.rotation = atan2(direction.y, direction.x) - pi / 2
 
             if self.path_index > 15:
-
                 self.path_index = 0
-
-
-                if path_finder.can_hear((int(self.position.x), int(self.position.y)), player_position,30):
-
-                        self.path = path_finder.get_shortest_path((int(self.position.x), int(self.position.y)), player_position)
-
+                if self.path_finder.can_hear((int(self.position.x), int(self.position.y)), player_position, 30):
+                    self.path = self.path_finder.get_shortest_path((int(self.position.x), int(self.position.y)),
+                                                                   player_position)
                 else:
-                    self.path = path_finder.get_patrol_path((int(self.position.x), int(self.position.y)))
-
-
+                    self.path = self.path_finder.get_patrol_path((int(self.position.x), int(self.position.y)))
 
             if distance_to_target > step_distance:
                 direction = direction.normalize()
@@ -99,8 +94,6 @@ class Character(Entity):
 
             self.update_motion(delta_time)
 
-
-
     def line_of_sight(self, start: Vec3, end: Vec3) -> bool:
         x1, y1 = int(start.x), int(start.y)
         x2, y2 = int(end.x), int(end.y)
@@ -110,7 +103,8 @@ class Character(Entity):
         err = dx - dy
 
         while True:
-            if self.level_map.get_tile_at(x1, y1).is_solid:
+            tile = self.level.get_tile_at(x1, y1)
+            if tile is None or tile.is_solid:
                 return False
             if x1 == x2 and y1 == y2:
                 break
@@ -123,37 +117,53 @@ class Character(Entity):
                 y1 += sy
         return True
 
+    @staticmethod
+    def angle_normalize(angle):
+        mod_angle = angle % (pi * 2)
+        return mod_angle if mod_angle < pi else pi * 2 - mod_angle
+
     def can_see_player(self, player_position: Vec3) -> bool:
+        dx = player_position.x - self.position.x
+        dy = player_position.y - self.position.y
+        direction = Character.angle_normalize(-atan2(dx, dy) - self.rotation)
+        if -1.5 < direction < 1.5:
+            distance_to_player = sqrt(dx ** 2 + dy ** 2)
+            if distance_to_player < 1.0:
+                return False
 
-        distance_to_player = sqrt(
-            (player_position.x - self.position.x) ** 2 + (player_position.y - self.position.y) ** 2)
-        if distance_to_player < 1.0:
-            return False
-
-        return self.line_of_sight(self.position, player_position)
+            return self.line_of_sight(self.position, player_position)
+        return False
 
     def start_shooting(self):
+        self.set_state('shoot')
         if self.weapon is not None:
             self.weapon.start_use()
             self.is_shooting = True
 
-
     def stop_shooting(self):
+        self.set_state('idle')
         if self.weapon is not None:
             self.weapon.stop_use()
             self.is_shooting = False
 
+    def set_state(self, state):
+        if self.state == state:
+            return False
+        self.state = state
+        self.state_time = 0.0
+        return True
 
+    def update_(self, player_position, delta_time):
+        super().update(delta_time)
+        self.state_time += delta_time
 
-    def update_(self,player_position,delta_time):
-            super().update(delta_time)
-            self.move(player_position,delta_time)
+        self.move(player_position, delta_time)
 
-
-
-            if self.can_see_player(Vec3(player_position[0], player_position[1], 0)):
+        if self.can_see_player(player_position):
+            # self.rotation =
+            if self.state_time > 1.5:
                 self.start_shooting()
-            else:
-                self.stop_shooting()
+        if self.state == 'shoot' and self.state_time > 0.5:
+            self.stop_shooting()
 
-            self.update_weapon_offset()
+        self.update_weapon_offset()

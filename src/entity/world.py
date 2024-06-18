@@ -1,5 +1,6 @@
 from pyglet.math import Vec2
 
+from src.util.console import console
 from src.util.unit import Unit
 
 
@@ -17,7 +18,10 @@ class World(Unit):
         self.entities.append(entity)
 
     def remove(self, entity):
-        self.entities.remove(entity)
+        try:
+            self.entities.remove(entity)
+        except ValueError:
+            console.log_warn('Entity not in entities list')
 
     def update(self, delta_time, characters):
         for entity in self.entities:
