@@ -82,7 +82,7 @@ for x, y, tile in level.all_tiles():
         player.position.x = x + .5
         player.position.y = y + .5
         player.rotation = pi / 2 * ts // 60
-    if 16 <= ts < 20:
+    if 16 <= ts < 18:
         character = create_character('recruit')
         character.position.x = x + .5
         character.position.y = y + .5
@@ -133,15 +133,19 @@ for x, y, tile in level.all_tiles():
             vls_item_rect_proto.create_mesh(Vec3(), 0, Vec3(0.75, 0.75, 0.75)),
             item
         ))
+
     if ts == 8:
         wpts.append((x + .5, y + .5))
 
 print(entities)
 print(items)
-print(wpts)
+print(f'{wpts=}')
 
+for _, entity, _ in entities:
+    entity.wpts = wpts
+    entity.real_player = player
 
-projection = Mat4.perspective_projection(1280/720, 1.0, 2048.0, fov=40)
+projection = Mat4.perspective_projection(1280 / 720, 1.0, 2048.0, fov=40)
 # projection = Mat4.orthogonal_projection(-640, 640, -360, 360, -255, 255)
 camera = Camera(projection)
 camera.scale = 64
@@ -200,9 +204,6 @@ def update(delta_time):
     if level.get_tile_at(player.position.x + 0.8, player.position.y).is_solid:  # right
         player.position.x = ceil(player.position.x) - 0.8
 
-
-
-
     for rect, entity, bcircle in entities:
         entity.update_(player.position, delta_time)
 
@@ -210,7 +211,6 @@ def update(delta_time):
         rect.rotation = entity.rotation
         bcircle.center.x = entity.position.x
         bcircle.center.y = entity.position.y
-
 
     prev_weapon = player.weapon
     for _, it in items:

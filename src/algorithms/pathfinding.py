@@ -1,7 +1,8 @@
 import random
+from random import shuffle
 from dataclasses import dataclass, field
 from src.level.level import Level
-from math import sqrt, floor
+from math import sqrt
 from queue import PriorityQueue
 from collections import deque
 
@@ -11,15 +12,12 @@ class PathFinder:
     level_map: Level
 
     directions_cords: list[tuple[int, int]] = field(default_factory=lambda: [(0, 1), (1, 0), (-1, 0), (
-        0, -1)])  # [(0, 1), (1, 1), (0, 1), (-1, 1), (0, -1), (-1,-1), (-1, 0), (-1, 1)])
+    0, -1)])  # [(0, 1), (1, 1), (0, 1), (-1, 1), (0, -1), (-1,-1), (-1, 0), (-1, 1)])
+
+    wpts: list[tuple[int, int]] = field(default_factory=list)
 
     def can_go_to(self, x: float, y: float) -> bool:
-        tx = floor(x)
-        ty = floor(y)
-        tile = self.level_map.get_tile_at(tx, ty)
-        if tile is not None:
-            return tile.is_solid
-        return False
+        return self.level_map.get_tile_at(x, y) is not None and not self.level_map.get_tile_at(x, y).is_solid
 
     @staticmethod
     def heuristic(pos_1: tuple[int, int], pos_2: tuple[int, int]) -> float:
@@ -29,32 +27,36 @@ class PathFinder:
     def get_distance(pos_1: tuple[int, int], pos_2: tuple[int, int]) -> float:
         return sqrt(abs(pos_1[0] - pos_2[0]) ** 2 + abs(pos_1[1] - pos_2[1]) ** 2)
 
+    def get_wpts_in_chosen_dist_order(self, position, order: int = 1):
+        return sorted(self.wpts, key=lambda w: order * self.heuristic(w, position))
+
+    def normalize_wpts(self) -> None:
+        if not isinstance(self.wpts[0][0], int):
+            self.wpts = [(int(w[0]), int(w[1])) for w in self.wpts]
+
     def get_neighbours(self, position: tuple[int, int]) -> list[tuple[int, int]]:
         neighbours = []
         for dx, dy in self.directions_cords:
             nx = position[0] + dx
             ny = position[1] + dy
 
-            if dx == 0 and dy == 1:
-                if (self.can_go_to(nx, ny + 0.8) and
-                        self.can_go_to(nx + 0.8, ny + 0.8) and
-                        self.can_go_to(nx - 0.8, ny + 0.8)):
-                    neighbours.append((nx, ny))
-            if dx == 1 and dy == 0:
-                if (self.can_go_to(nx + 0.8, ny) and
-                        self.can_go_to(nx + 0.8, ny + 0.8) and
-                        self.can_go_to(nx + 0.8, ny - 0.8)):
-                    neighbours.append((nx, ny))
-            if dx == 0 and dy == -1:
-                if (self.can_go_to(nx, ny - 0.8) and
-                        self.can_go_to(nx - 0.8, ny - 0.8) and
-                        self.can_go_to(nx + 0.8, ny - 0.8)):
-                    neighbours.append((nx, ny))
-            if dx == -1 and dy == 0:
-                if (self.can_go_to(nx - 0.8, ny) and
-                        self.can_go_to(nx - 0.8, ny - 0.8) and
-                        self.can_go_to(nx + 0.8, ny + 0.8)):
-                    neighbours.append((nx, ny))
+            match (dx, dy):
+                case (0, 1):
+                    if self.can_go_to(nx, ny + 0.8) and self.can_go_to(nx + 0.8, ny + 0.8) and self.can_go_to(nx - 0.8,
+                                                                                                              ny + 0.8):
+                        neighbours.append((nx, ny))
+                case (1, 0):
+                    if self.can_go_to(nx + 0.8, ny) and self.can_go_to(nx + 0.8, ny + 0.8) and self.can_go_to(nx + 0.8,
+                                                                                                              ny - 0.8):
+                        neighbours.append((nx, ny))
+                case (0, -1):
+                    if self.can_go_to(nx, ny - 0.8) and self.can_go_to(nx - 0.8, ny - 0.8) and self.can_go_to(nx + 0.8,
+                                                                                                              ny - 0.8):
+                        neighbours.append((nx, ny))
+                case (-1, 0):
+                    if self.can_go_to(nx - 0.8, ny) and self.can_go_to(nx - 0.8, ny - 0.8) and self.can_go_to(nx + 0.8,
+                                                                                                              ny + 0.8):
+                        neighbours.append((nx, ny))
 
         return neighbours
 
@@ -70,6 +72,11 @@ class PathFinder:
         path.append(start)
         path.reverse()
         return path
+
+    def get_wave_point(self, goal: tuple[int, int]) -> list[tuple[int, int]]:
+        wave_points = self.get_wpts_in_chosen_dist_order(goal, order=1)
+
+        return wave_points
 
     def get_mid_point(self, start: tuple[int, int], goal: tuple[int, int]) -> list[tuple[int, int]]:
 
@@ -142,32 +149,43 @@ class PathFinder:
         return possible_mid_points
 
     def flank(self, start: tuple[int, int], goal: tuple[int, int]) -> list[tuple[int, int]]:
-        mid_points = self.get_mid_point(start, goal)
+        mid_points = self.get_wave_point(goal)
 
         for mid_point in mid_points:
 
             flanking_path = self.get_shortest_path(start, mid_point)[:-1] + self.get_shortest_path(mid_point, goal)
             if flanking_path:
                 return flanking_path
-        return []
 
-    def get_random_free_cords(self, start: tuple[int, int]) -> tuple[int, int]:
-        x_max = self.level_map.chunks.x_size * self.level_map.chunk_size
-        y_max = self.level_map.chunks.y_size * self.level_map.chunk_size
+            if mid_points.index(mid_point) > 15:
+                return self.get_shortest_path(start, goal)
 
-        for x in range(max(0, start[0] - 20), min(start[0] + 20, x_max)):
-            for y in range(max(0, start[1] - 10, min(start[1] + 10, y_max))):
-                if self.can_go_to(x, y):
-                    return x, y
+    def get_shuffled_possible_patrol_positions(self, start: tuple[int, int]) -> list[tuple[int, int]]:
+
+        self.normalize_wpts()
+        patrol_positions = self.get_wpts_in_chosen_dist_order(start)
+        shuffle(patrol_positions)
+
+        return patrol_positions
 
     def get_patrol_path(self, start: tuple[int, int]):
-        patrol_destination = self.get_random_free_cords(start)
 
-        return self.get_shortest_path(start, patrol_destination)
+        shuffled_positions = self.get_shuffled_possible_patrol_positions(start)
+
+        for sp in shuffled_positions:
+
+            if path := self.get_shortest_path(start, sp):
+                print(f'Found path')
+                return path
+
+            if shuffled_positions.index(sp) > 15:
+                return self.get_shortest_path(start,
+                                              (start[0] + random.randint(-10, 10), start[1] + random.randint(-15, 15)))
 
     def get_shortest_path(self, start: tuple[int, int], goal: tuple[int, int]) -> list[tuple[int, int]]:
 
         if not self.can_go_to(start[0], start[1]) or not self.can_go_to(goal[0], goal[1]):
+            print("Block")
             return []
 
         pq = PriorityQueue()
