@@ -87,6 +87,15 @@ for x, y, tile in level.all_tiles():
             character,
             BCircle(Vec2(), 0.5)
         ))
+        weapon = create_weapon('mk5', tracer_rect_proto)
+        weapon.position = character.position  # Set initial position
+        character.weapon = weapon  # Assign weapon to character
+
+        # Add weapon to items list
+        items.append((
+            pp9_item_rect_proto.create_mesh(Vec3(), 0, Vec3(0.75, 0.75, 0.75)),
+            weapon
+        ))
     if ts == 12:
         item = create_weapon('pp9', tracer_rect_proto)
         item.position.x = x + .5
@@ -122,6 +131,10 @@ for x, y, tile in level.all_tiles():
 
 print(entities)
 print(items)
+
+
+for _, entity,_ in entities:
+    entity.level_map = level
 
 projection = Mat4.perspective_projection(1280/720, 1.0, 2048.0, fov=40)
 # projection = Mat4.orthogonal_projection(-640, 640, -360, 360, -255, 255)
@@ -176,6 +189,18 @@ def update(delta_time):
     if level.get_tile_at(player.position.x + 0.8, player.position.y).is_solid:  # right
         player.position.x = ceil(player.position.x) - 0.8
 
+
+
+
+    for rect, entity, bcircle in entities:
+        entity.update_((ceil(player.position.x), ceil(player.position.y)), delta_time)
+
+        rect.position = entity.position
+        rect.rotation = entity.rotation
+        bcircle.center.x = entity.position.x
+        bcircle.center.y = entity.position.y
+
+
     prev_weapon = player.weapon
     for _, it in items:
         it.update(delta_time)
@@ -192,7 +217,8 @@ def update(delta_time):
     world.update(delta_time, entities)
 
 
-sprite_image = base_pack.get('tex.hud.doa')
+sprite_image = base_pack.get('tex.hud.hp-point1')
+print(f'{sprite_image=}')
 sprite = Sprite(sprite_image)
 sprite.draw()
 
@@ -201,28 +227,3 @@ app.run(1 / 60)
 
 world.level.test_collisions(Vec3(5.5, 7.2), Vec3(10.3, 9.3))
 
-
-from src.algorithms.pathfinding import PathFinder
-path_finder = PathFinder(level)
-
-print(f'{path_finder.can_hear((5, 5), (5, 11), 6)}')
-
-tab = [[[] for _ in range(25)] for _ in range(25)]
-for x in range(25):
-    for y in range(25):
-        if level.get_tile_at(x, y) == 0:
-            tab[x][y].append('W')
-start = (5, 10)
-end = (11, 22)
-path = path_finder.get_shortest_path(start, end)
-path1 = path_finder.flank(start, end)
-print(f'{path=}')
-print(f'{path1=}')
-
-for x, y in path:
-    tab[x][y].append(1)
-
-for x,y in path1:
-    tab[x][y].append(2)
-
-print(*tab, sep='\n')

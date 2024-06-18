@@ -30,8 +30,7 @@ class Player(Character):
 
     def draw(self):
         pass
-        # self.sprite.update(640, 360, 0.0, self.rotation, 2.0)
-        # self.sprite.draw()
+
 
     def increment_score(self, new_score: int):
         self.score += new_score
@@ -87,6 +86,8 @@ class Player(Character):
         x_change_mouse_player = controls.mouse_x - 640
         y_change_mouse_player = controls.mouse_y - 360
         self.rotation = atan2(y_change_mouse_player, x_change_mouse_player) - pi / 2
+
+
 
     def update(self, delta_time):
         self.time += delta_time

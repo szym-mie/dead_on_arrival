@@ -1,5 +1,4 @@
 from abc import ABC
-
 from pyglet.math import Vec3
 
 
