@@ -23,10 +23,13 @@ class World(Unit):
         self.projectiles.append(entity)
 
     def remove_projectile(self, entity):
-        try:
+        # try:
+        #     self.projectiles.remove(entity)
+        # except IndexError:
+        #     pass
+
+        if entity in self.projectiles:
             self.projectiles.remove(entity)
-        except IndexError:
-            pass
 
     def update(self, delta_time, characters):
         for projectiles in self.projectiles:

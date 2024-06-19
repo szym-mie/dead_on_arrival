@@ -1,18 +1,15 @@
-import random
-from random import shuffle
-from dataclasses import dataclass, field
-from src.level.level import Level
 from math import sqrt
-from queue import PriorityQueue
 from collections import deque
-
+from queue import PriorityQueue
+from src.level.level import Level
+from random import shuffle, randint
+from dataclasses import dataclass, field
 
 @dataclass
 class PathFinder:
     level_map: Level
 
-    directions_cords: list[tuple[int, int]] = field(default_factory=lambda: [(0, 1), (1, 0), (-1, 0), (
-    0, -1)])  # [(0, 1), (1, 1), (0, 1), (-1, 1), (0, -1), (-1,-1), (-1, 0), (-1, 1)])
+    directions_cords: list[tuple[int, int]] = field(default_factory=lambda: [(0, 1), (1, 0), (-1, 0), (0, -1)])
 
     wpts: list[tuple[int, int]] = field(default_factory=list)
 
@@ -27,7 +24,7 @@ class PathFinder:
     def get_distance(pos_1: tuple[int, int], pos_2: tuple[int, int]) -> float:
         return sqrt(abs(pos_1[0] - pos_2[0]) ** 2 + abs(pos_1[1] - pos_2[1]) ** 2)
 
-    def get_wpts_in_chosen_dist_order(self, position, order: int = 1):
+    def get_wpts_in_chosen_dist_order(self, position, order: int = 1) -> list[tuple[int, int]]:
         return sorted(self.wpts, key=lambda w: order * self.heuristic(w, position))
 
     def normalize_wpts(self) -> None:
@@ -74,7 +71,7 @@ class PathFinder:
         return path
 
     def get_wave_point(self, goal: tuple[int, int]) -> list[tuple[int, int]]:
-        wave_points = self.get_wpts_in_chosen_dist_order(goal, order=1)
+        wave_points = self.get_wpts_in_chosen_dist_order(goal, order=-1)
 
         return wave_points
 
@@ -153,8 +150,7 @@ class PathFinder:
 
         for mid_point in mid_points:
 
-            flanking_path = self.get_shortest_path(start, mid_point)[:-1] + self.get_shortest_path(mid_point, goal)
-            if flanking_path:
+            if flanking_path := self.get_shortest_path(start, mid_point)[:-1] + self.get_shortest_path(mid_point, goal):
                 return flanking_path
 
             if mid_points.index(mid_point) > 15:
@@ -168,7 +164,7 @@ class PathFinder:
 
         return patrol_positions
 
-    def get_patrol_path(self, start: tuple[int, int]):
+    def get_patrol_path(self, start: tuple[int, int]) -> list[tuple[int, int]]:
 
         shuffled_positions = self.get_shuffled_possible_patrol_positions(start)
 
@@ -179,8 +175,7 @@ class PathFinder:
                 return path
 
             if shuffled_positions.index(sp) > 15:
-                return self.get_shortest_path(start,
-                                              (start[0] + random.randint(-10, 10), start[1] + random.randint(-15, 15)))
+                return self.get_shortest_path(start,(start[0]+randint(-10, 10), start[1]+randint(-15, 15)))
 
     def get_shortest_path(self, start: tuple[int, int], goal: tuple[int, int]) -> list[tuple[int, int]]:
 

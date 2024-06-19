@@ -1,6 +1,6 @@
-from src.collision.rectangle import Rectangle
 import weakref
-
+from typing import Any
+from src.collision.rectangle import Rectangle
 image_data_cache = weakref.WeakKeyDictionary()
 
 
@@ -8,7 +8,7 @@ class SpriteCollision:
     def __init__(self, sprite):
         self.sprite = sprite
 
-    def get_image(self):
+    def get_image(self) -> tuple[Any, Any, Any]:
         image = self.sprite.image
         if image in image_data_cache:
             d = image_data_cache[image]
@@ -17,12 +17,12 @@ class SpriteCollision:
             image_data_cache[image] = d
         return d, image.width, image.height
 
-    def get_rect(self):
+    def get_rect(self) -> Rectangle:
         return Rectangle.from_sprite(self.sprite)
 
 
-def collide(sprite1, sprite2):
-    r1, r2 = sprite1.get_rect(), sprite2.get_rect()
+def collide(sprite1, sprite2) -> bool:
+
 
     collision_sprite1 = SpriteCollision(sprite1)
     collision_sprite2 = SpriteCollision(sprite2)

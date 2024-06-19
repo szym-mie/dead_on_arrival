@@ -143,7 +143,7 @@ print(f'{wpts=}')
 
 for _, entity, _ in entities:
     entity.wpts = wpts
-    entity.real_player = player
+
 
 projection = Mat4.perspective_projection(1280 / 720, 1.0, 2048.0, fov=40)
 # projection = Mat4.orthogonal_projection(-640, 640, -360, 360, -255, 255)
@@ -206,6 +206,12 @@ def update(delta_time):
 
     for rect, entity, bcircle in entities:
         entity.update_(player.position, delta_time)
+        # print(f'{entity=}')
+        # print(f'{entity.position=}')
+        # print( f'{entity.path =}')
+        # print(f'{entity.path_index=}')
+        if entity.position.x > 65:
+            break
 
         rect.position = entity.position
         rect.rotation = entity.rotation

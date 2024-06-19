@@ -1,7 +1,8 @@
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-from src.collision.sprite_collision import SpriteCollision, collide
 import pyglet
+from src.collision.sprite_collision import SpriteCollision, collide
+
 
 window = pyglet.window.Window(SCREEN_WIDTH, SCREEN_HEIGHT, caption="Masks")
 

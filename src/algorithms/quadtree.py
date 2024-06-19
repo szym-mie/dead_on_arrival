@@ -101,15 +101,13 @@ class QuadTree:
                 if not self.northeast_part:
                     self.northeast_part = QuadTree(
                         Point(
-                            # self.upper_right_boundary.x,
-                            # (self.upper_right_boundary.y + self.lower_left_boundary.y)/2
+
                             (self.upper_right_boundary.x + self.lower_left_boundary.x) / 2,
                             self.upper_right_boundary.y
 
                         ),
                         Point(
-                            # (self.upper_right_boundary.x + self.lower_left_boundary.x)/2,
-                            # self.lower_left_boundary.y
+
                             self.lower_left_boundary.x,
                             (self.upper_right_boundary.y + self.lower_left_boundary.y) / 2
 

@@ -24,8 +24,8 @@ class Rectangle:
         return not (self.x2 < other.x1 or self.y2 < other.y1 or
                     self.x1 > other.x2 or self.y1 > other.y2)
 
-    @staticmethod
-    def from_sprite(sprite):
+    @classmethod
+    def from_sprite(cls,sprite):
         x = int(sprite.x - sprite.image.anchor_x)
         y = int(sprite.y - sprite.image.anchor_y)
-        return Rectangle(x, y, x + sprite.width, y + sprite.height)
+        return cls(x, y, x + sprite.width, y + sprite.height)
